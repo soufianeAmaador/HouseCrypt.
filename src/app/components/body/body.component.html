@@ -1,0 +1,11 @@
+<div class="container p-5">
+    <div class="row row-cols-1 g-5">
+        <div class="card col mx-2" style="width: 18rem;" *ngFor="let property of properties">
+            <img class="card-img-top" src={{property.images}} alt="Placehoder image property">
+            <div class="card-body">
+              <h5 class="card-title">{{property.title}}</h5>
+              <p class="card-text">{{property.description}}</p>
+              <a href="#" class="btn btn-primary">Current bid: {{property.askingPrice}}SC</a>
+            </div>
+          </div>    
+</div>
