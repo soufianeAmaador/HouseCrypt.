@@ -1,0 +1,152 @@
+<!-- <div class="container">
+    <div id="carouselPropertyImages" style="max-height: 500px;" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="/property#carouselPropertyImages" data-slide-to="1" class="active"></li>
+          <li data-target="/property#carouselPropertyImages" data-slide-to="2"></li>
+          <li data-target="/property#carouselPropertyImages" data-slide-to="3"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img class="d-block mx-auto img-fluid rounded" style="max-height: 500px;" src='assets/property1.jpg' alt="First sslide">
+          </div>
+          <div class="carousel-item">
+            <img class="d-block w-100" src='assets/property2.jpg' alt="Second slide">
+          </div>
+          <div class="carousel-item">
+            <img class="d-block w-100" src='assets/property3.jpg' alt="Third slide">
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="/property#carouselPropertyImages" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="/property#carouselPropertyImages" role="button" data-slide="next">
+          <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Next</span>
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div> -->
+<div class="container">
+    <!-- Carousel part -->
+    <div id="carouselPropertyImages" style="max-height: 500px;" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselPropertyImages" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselPropertyImages" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselPropertyImages" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselPropertyImages" data-bs-slide-to="3" aria-label="Slide 4"></button>
+
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="assets/property1.jpg" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="assets/property1.jpg">
+          </div>
+          <div class="carousel-item">
+            <img src="assets/property2.jpg" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="assets/property2.jpg">
+          </div>
+          <div class="carousel-item">
+            <img src="assets/property3.jpg" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="assets/property3.jpg">
+          </div>
+          <div class="carousel-item">
+            <img src="assets/property4.jpg" class="d-block mx-auto img-fluid" style="max-height: 500px;" alt="assets/property3.jpg">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselPropertyImages" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselPropertyImages" data-bs-slide="next">
+            <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Next</span>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+
+        <!-- Description of the house price and street-->
+        <div class="row">
+            <div class="card col-xxl-8 mx-4 border-0" >
+                <div class="card-body">
+                  <h1 class="card-title">somewhere street 12</h1>
+                  <p class="card-text">7933 PC Pesse Gemeente Utrecht Nederland</p>
+                  <h3> ߥ800,000.00 SC</h3>
+                </div>
+              </div>
+        <!-- Card owner info -->
+              <div class="card col-sm-3 mx-4" style="max-height: 130px;">
+                <div class="card-body">
+                  <h1 class="card-title">John Doe</h1>
+                  <p class="card-text">Posted on: 20-04-2021</p>
+                  <span></span>
+                </div>
+              </div>
+              
+        </div>
+
+        <!-- Owner's description of the property -->
+      <div class="row">
+            <div class="card col-xxl-8 mx-4 border-0">
+                <div class="card-header bg-white"><h4> Description</h4></div>
+                <div class="card-body">Een heerlijke en compleet verbouwde vrijstaande woning met grote, volledig geïsoleerde, schuur in de dorpskern van Pesse. Deze geweldig lichte woning is instapklaar en zeker een bezichtiging waard!</div>
+            </div>
+
+            <!-- Bidding card -->
+            <div class="card col-sm-3 mx-4" >
+                <div class="card-header bg-white">Place a bid</div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">SC</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="SouphCoin" aria-label="Username" aria-describedby="basic-addon1">
+                  </div>
+                <button type="button" class="btn btn-primary">Place Bid</button>
+            
+                <!-- Here comes an NG IF to replace all the bids automatically! -->
+                <div class="row">
+                  <div class="col">Jake</div>
+                  <div class="col">960,140.00 SC</div>
+                </div>
+                <div class="card-footer"> Jake 960,140.00 SC</div>
+                <div class="card-footer"> Kadyrov 812,00.00 SC</div>
+                <div class="card-footer"> Sam 800,150.00 SC</div>
+              </div>
+
+      </div>
+
+      <!-- specification list -->
+      <div class="row">
+          <div class="col">
+              <div class="card col-xxl-8 border-0">
+                <div class="card-header bg-white"><h4>Properties</h4></div>
+                <div class="row">
+                    <div class="col-6 card-footer bg-white">asking price</div><div class="col-6 card-footer bg-white">800,000.00</div>
+                    <div class="col-6 card-footer bg-white">price per m²</div><div class="col-6 card-footer bg-white">4,083.00</div>
+                    <div class="col-6 card-footer bg-white">Advertised since</div><div class="col-6 card-footer bg-white">7 weeks</div>
+                    <div class="col-6 card-footer bg-white">Status</div><div class="col-6 card-footer bg-white">Available</div>
+                    <div class="col-6 card-footer bg-white">Admission</div><div class="col-6 card-footer bg-white">Discussable</div>
+                    <div class="col-6 card-footer bg-white"><h5>Build</h5></div><div class="col-6 card-footer bg-white"></div>
+                    <div class="col-6 card-footer bg-white">Type of home</div><div class="col-6 card-footer bg-white">Detached house</div>
+                    <div class="col-6 card-footer bg-white">Date of build</div><div class="col-6 card-footer bg-white">1960-1970</div>
+                    <div class="col-6 card-footer bg-white">Type of roof</div><div class="col-6 card-footer bg-white">Gable roof covered with tiles</div>
+                    
+                    <div class="col-6 card-footer bg-white"><h5>Surfaces and contents</h5></div><div class="col-6 card-footer bg-white"></div>
+                    <div class="col-6 card-footer bg-white">Wonen</div><div class="col-6 card-footer bg-white">120 m²</div>
+                    <div class="col-6 card-footer bg-white">Other indoor space</div><div class="col-6 card-footer bg-white">15 m²</div>
+                    <div class="col-6 card-footer bg-white">Building-related outdoor space</div><div class="col-6 card-footer bg-white">8 m²</div>
+                    <div class="col-6 card-footer bg-white">External storage space</div><div class="col-6 card-footer bg-white">68 m²</div>
+                    <div class="col-6 card-footer bg-white">Plot</div><div class="col-6 card-footer bg-white">604 m²</div>
+                    <div class="col-6 card-footer bg-white">Capacity</div><div class="col-6 card-footer bg-white">475 m²</div>
+
+                    <div class="col-6 card-footer bg-white"><h5>Layout</h5></div><div class="col-6 card-footer bg-white"></div>
+                    <div class="col-6 card-footer bg-white">Amount rooms</div><div class="col-6 card-footer bg-white">5 Rooms (4 bedrooms)</div>
+                    <div class="col-6 card-footer bg-white">Amount bathrooms</div><div class="col-6 card-footer bg-white">1 Bathroom and one seperate toilet</div>
+                    <div class="col-6 card-footer bg-white">Bathroom amenities</div><div class="col-6 card-footer bg-white">Bathtub and toilet</div>
+                    <div class="col-6 card-footer bg-white">Number of floors</div><div class="col-6 card-footer bg-white">2 floors and a loft</div>
+                    <div class="col-6 card-footer bg-white">Services</div><div class="col-6 card-footer bg-white">Air conditioning, fiber optic cable and mechanical ventilation</div>
+
+                </div>
+
+              </div>
+          </div>
+      </div>
+
+
+
+</div>
