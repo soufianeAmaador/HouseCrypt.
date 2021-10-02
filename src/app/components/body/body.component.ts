@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Property } from 'src/app/models/property.model';
+import { Property } from 'src/app/models/property';
 import { PropertyService } from 'src/app/services/property-service.service';
 
 @Component({
@@ -13,7 +13,7 @@ export class BodyComponent implements OnInit {
   constructor(private propertyService: PropertyService) { }
 
   ngOnInit(): void {
-    this.properties = this.propertyService.getAllProperties();
+    this.properties = Array.from(this.propertyService.getAllProperties().values()); 
   }
 
 }

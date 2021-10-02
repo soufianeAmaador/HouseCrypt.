@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import properties from 'src/assets/testData.json';
-import { Property } from '../models/property.model';
+import { Property } from '../models/property';
  
 
 @Injectable({
   providedIn: 'root'
 })
 export class PropertyService {
-  map: Map<string, Property> = new Map<string,Property>();
+  properties: Map<string, Property> = new Map<string,Property>();
+
 
   constructor() {
     
@@ -18,11 +19,12 @@ export class PropertyService {
   public populateScreen() {
      
     for (let i = 0; i < properties.length; i++) {
-      this.map.set(i.toString(), new Property(i.toString(), properties[i].title, properties[i].image, properties[i].description, <Number[]>[], properties[i].price));
+      this.properties.set(i.toString(), new Property(i.toString(), properties[i].title, properties[i].image, properties[i].description, <Number[]>[], properties[i].price, properties[i].biddings));
+
     }
   }
 
-  getAllProperties(): Property[] {
-    return Array.from (this.map.values());
+  getAllProperties(): Map<string, Property> {
+    return this.properties;
   }
 }

@@ -88,24 +88,31 @@
             </div>
 
             <!-- Bidding card -->
-            <div class="card col-sm-3 mx-4" >
+            <div class="card col-sm-3 mx-4" style="min-width: 260px;">
                 <div class="card-header bg-white">Place a bid</div>
+
+                <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="basic-addon1">SC</span>
                     </div>
-                    <input type="text" class="form-control" placeholder="SouphCoin" aria-label="Username" aria-describedby="basic-addon1">
+                    <input 
+                    type="number" 
+                    [formControl]="amount" 
+                    placeholder="SouphCoin" 
+                    aria-label="Username" 
+                    aria-describedby="basic-addon1"
+                    (ngModelChange)="emitChange()" >
+
                   </div>
-                <button type="button" class="btn btn-primary">Place Bid</button>
-            
+                <button type="submit" class="btn btn-primary" [disabled]="!isLargestBid" >Place Bid</button>
+                </form>
+
                 <!-- Here comes an NG IF to replace all the bids automatically! -->
-                <div class="row">
-                  <div class="col">Jake</div>
-                  <div class="col">960,140.00 SC</div>
+                <div class="row border-bottom" *ngFor="let bidder of property.biddings; let i = index" [ngClass]="(i%2 === 0)?'bg-light':'bg-white' ">
+                  <div class="col">{{bidder.alias}}</div>
+                  <div class="col">{{bidder.amount | currency:'SC '}}</div>
                 </div>
-                <div class="card-footer"> Jake 960,140.00 SC</div>
-                <div class="card-footer"> Kadyrov 812,00.00 SC</div>
-                <div class="card-footer"> Sam 800,150.00 SC</div>
               </div>
 
       </div>
