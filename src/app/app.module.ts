@@ -12,6 +12,7 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/h
 import { LogInComponent } from './components/log-in/log-in.component';
 import { DetailPageComponent } from './components/detail-page/detail-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UploadPropertyComponent } from './components/upload-property/upload-property.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     NavBarComponent,
     BodyComponent,
     LogInComponent,
-    DetailPageComponent
+    DetailPageComponent,
+    UploadPropertyComponent
   ],
   imports: [
     BrowserModule,

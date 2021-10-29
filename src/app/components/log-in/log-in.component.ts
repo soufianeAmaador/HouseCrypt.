@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
 
 @Component({
   selector: 'app-log-in',
@@ -12,4 +14,10 @@ export class LogInComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onSignup(form: NgForm) {
+    const email = form.value.email;
+    const password = form.value.password;
+    // this.sessionService.signOnUser(email, password);
+
+  }
 }

@@ -42,9 +42,14 @@ export class DetailPageComponent implements OnInit {
   }
 
   onSubmit(): void{
-    this.property.biddings.unshift(new Bidder("Anon",this.amount.value,"0x000000"));
+    if(parseInt(this.amount.value) > this.property.biddings[0].amount){
+      this.property.biddings.unshift(new Bidder("Anon",this.amount.value,"0x000000"));
+      this.amount.setValue("");
+    }
+
   }
 
+  //Formvalidations 
   emitChange(): void{
     if(this.amount.value === "" || this.amount.value <= this.property.biddings[0].amount) this.isLargestBid = false;
     else this.isLargestBid = true;

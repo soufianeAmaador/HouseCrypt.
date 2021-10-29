@@ -1,0 +1,343 @@
+<div class="container">
+<!-- this is the head of the form page  -->
+
+    <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="../../../assets/HouseCryptLogo.png" alt="Logo HouseCrypt" width="72" height="72">
+        <h2>Advertise your home</h2>
+        <p class="lead">Fill in the form below and upload atleast one photo of the property you are selling. Some fields are mandatory in order to submit your advertisement.</p>
+    </div>
+
+  <!-- This is the body of the form -->
+
+  <!-- this is the shoppincar section placed at the right side  -->
+  <div class="row">
+    <!-- <div class="col-md-4 order-md-2 mb-4">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Your cart</span>
+        <span class="badge badge-secondary badge-pill">3</span>
+      </h4>
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">Product name</h6>
+            <small class="text-muted">Brief description</small>
+          </div>
+          <span class="text-muted">$12</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">Second product</h6>
+            <small class="text-muted">Brief description</small>
+          </div>
+          <span class="text-muted">$8</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">Third item</h6>
+            <small class="text-muted">Brief description</small>
+          </div>
+          <span class="text-muted">$5</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between bg-light">
+          <div class="text-success">
+            <h6 class="my-0">Promo code</h6>
+            <small>EXAMPLECODE</small>
+          </div>
+          <span class="text-success">-$5</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Total (USD)</span>
+          <strong>$20</strong>
+        </li>
+      </ul>
+
+      <form class="card p-2">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Promo code">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-secondary">Redeem</button>
+          </div>
+        </div>
+      </form>
+    </div> -->
+
+
+    <div class="col-md-8 order-md-1">
+      <h4 class="mb-3">Property</h4>
+
+      
+      <form class="needs-validation" novalidate="">
+
+        <!-- Image upload -->
+        <hr class="mb-4">
+        <div class="row">
+            <div class="mb-3">
+                <label for="images">Images</label>
+                <input type="image" class="form-control" id="images" value="" required="" multiple>
+                <div class="invalid-feedback">
+                    Please insert atleast one image!
+                </div>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <div class="row">
+          <div class="mb-3">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" placeholder="Write an eyecatching title!" value="" required="">
+            <div class="invalid-feedback">
+              Valid title is required.
+            </div>
+          </div>
+          <!-- <div class="col-md-6 mb-3">
+            <label for="lastName">Price per m²</label>
+            <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
+            <div class="invalid-feedback">
+              Please fill in the empty fields
+            </div>
+          </div> -->
+        </div>
+
+        <!-- description -->
+        <div class="mb-3">
+            <label for="description">description</label>
+            <textarea class="form-control" id="description" placeholder="Write something about your property..." value="" required=""></textarea> 
+        </div>
+
+        <!-- Asking price -->
+        <div class="mb-4">
+          <label for="price">Asking price<span class="text-muted"> (Suggested)</span></label>
+          <input type="number" class="form-control" id="askingPrice" placeholder="">
+          <div class="invalid-feedback">
+            Please enter a valid and rational number!
+          </div>
+        </div>
+
+        <!-- <div class="mb-3">
+          <label for="address">Address</label>
+          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="">
+          <div class="invalid-feedback">
+            Please enter your shipping address.
+          </div>
+        </div> -->
+
+        <!-- <div class="mb-3">
+          <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
+          <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+        </div> -->
+
+        <!-- <div class="row">
+          <div class="col-md-5 mb-3">
+            <label for="country">Country</label>
+            <select class="custom-select d-block w-100" id="country" required="">
+              <option value="">Choose...</option>
+              <option>United States</option>
+            </select>
+            <div class="invalid-feedback">
+              Please select a valid country.
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label for="state">State</label>
+            <select class="custom-select d-block w-100" id="state" required="">
+              <option value="">Choose...</option>
+              <option>California</option>
+            </select>
+            <div class="invalid-feedback">
+              Please provide a valid state.
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="zip">Zip</label>
+            <input type="text" class="form-control" id="zip" placeholder="" required="">
+            <div class="invalid-feedback">
+              Zip code required.
+            </div>
+          </div>
+        </div> -->
+        
+        <h4 class="mb-3">Surfaces and contents</h4>
+        <hr class="mb-4">
+        <!-- Surface in m² -->
+        <div class="mb-3">
+            <label for="plotsurface">Plot surface<span class="text-muted">  expressed in m²</span></label>
+            <input type="number" class="form-control" id="plotsurface" placeholder="">
+            <div class="invalid-feedback">
+              Please enter a valid number!
+            </div>
+          </div>
+
+        <!-- liveable Surface in m² -->
+        <div class="mb-3">
+            <label for="livingsurface">liveable surface<span class="text-muted">    expressed in m²</span></label>
+            <input type="number" class="form-control" id="livingsurface" placeholder="">
+            <div class="invalid-feedback">
+              Please enter a valid number!
+            </div>
+          </div>
+
+        <!-- other indoor space in m² -->
+        <div class="mb-3">
+            <label for="otherindoorsurface">Other indoor space<span class="text-muted"> expressed in m²</span></label>
+            <input type="number" class="form-control" id="ontherindoorsurface" placeholder="">
+            <div class="invalid-feedback">
+              Please enter a valid number!
+            </div>
+          </div>
+
+        <!-- other indoor space in m² -->
+        <div class="mb-3">
+            <label for="buildingrelatedsurface">Building-related outdoor space<span class="text-muted"> expressed in m²</span></label>
+            <input type="number" class="form-control" id="buildingrelatedsurface" placeholder="">
+            <div class="invalid-feedback">
+              Please enter a valid number!
+            </div>
+          </div>
+
+        <!-- external storage space in m² -->
+        <div class="mb-3">
+            <label for="externalstoragesurface">external storage space<span class="text-muted"> expressed in m²</span></label>
+            <input type="number" class="form-control" id="externalstoragesurface" placeholder="">
+            <div class="invalid-feedback">
+              Please enter a valid number!
+            </div>
+          </div>
+
+        <!-- capacity in m² -->
+        <div class="mb-4">
+            <label for="capacity">Capacity<span class="text-muted"> expressed in m³</span></label>
+            <input type="number" class="form-control" id="capacity" placeholder="">
+            <div class="invalid-feedback">
+              Please enter a valid number!
+            </div>
+          </div>
+
+        <!-- <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="same-address">
+          <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
+        </div> -->
+        <!-- <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="save-info">
+          <label class="custom-control-label" for="save-info">Save this information for next time</label>
+        </div> -->
+        <h4 class="mb-3">Build</h4>
+        <hr class="mb-4">
+                <!-- Type of home -->
+                <div class="mb-3">
+                    <label for="typehome">Type of home</label>
+                    <select class="form-control" id="typehome">
+                        <option *ngFor="let house of typesOfHomes">{{house}}</option>
+                    </select>
+                  </div>
+
+        
+                <!-- Type of roof -->
+                <div class="mb-3">
+                    <label for="typeroof">Type of roof</label>
+                    <select class="form-control" id="typeroof">
+                        <option *ngFor="let roof of typesOfRoofs">{{roof}}</option>
+                    </select>
+                  </div>    
+
+                  
+                <!-- Date of build -->
+                <div class="mb-4">
+                    <label for="datebuild">Date of build</label>
+                    <input type="date" class="form-control" id="datebuild" placeholder="">
+                  </div>
+        
+
+        <!-- <div class="d-block my-3">
+          <div class="custom-control custom-radio">
+            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="" required="">
+            <label class="custom-control-label" for="credit">Credit card</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required="">
+            <label class="custom-control-label" for="debit">Debit card</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
+            <label class="custom-control-label" for="paypal">Paypal</label>
+          </div>
+        </div> -->
+        <!-- <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cc-name">Name on card</label>
+            <input type="text" class="form-control" id="cc-name" placeholder="" required="">
+            <small class="text-muted">Full name as displayed on card</small>
+            <div class="invalid-feedback">
+              Name on card is required
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cc-number">Credit card number</label>
+            <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+            <div class="invalid-feedback">
+              Credit card number is required
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="row">
+          <div class="col-md-3 mb-3">
+            <label for="cc-expiration">Expiration</label>
+            <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+            <div class="invalid-feedback">
+              Expiration date required
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="cc-expiration">CVV</label>
+            <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+            <div class="invalid-feedback">
+              Security code required
+            </div>
+          </div>
+        </div> -->
+
+        <h4 class="mb-3">Layout</h4>
+        <hr class="mb-4">
+                <!-- Amount of rooms -->
+        <div class="mb-3">
+            <label for="roomamount">Amount of rooms</label>
+            <input type="number" class="form-control" id="roomamount" placeholder="">
+        </div>
+            
+        <!-- Amount of bathrooms -->
+        <div class="mb-3">
+            <label for="bathroomamount">Amount of bathrooms</label>
+            <input type="number" class="form-control" id="bathroomamount" placeholder="">
+        </div>
+
+        <!-- Bathroom amenities -->
+        <div class="mb-3">
+            <label for="bathroomamenities">Bathroom amenities</label>
+            <div class="row bg-light">
+                <div class="col-sm-6" *ngFor="let amenity of bathroomAmenitiesList" id={{amenity}}>
+                    <input type="checkbox" name={{amenity}}> {{amenity}}
+                </div>
+            </div>
+        </div>
+
+            <!-- Amount of floors -->
+        <div class="mb-3">
+            <label for="flooramount">Amount of floors</label>
+            <input type="number" class="form-control" id="flooramount" placeholder="">
+        </div>
+
+            <!-- Services -->
+        <div class="mb-3">
+            <label for="services">Services</label>
+            <div class="row bg-light">
+                <div class="col-sm-6" *ngFor="let service of servicesList" id={{service}}>
+                    <input type="checkbox" name={{service}}> {{service}}
+                </div>
+            </div>
+        </div>
+
+
+
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Submit ad!</button>
+      </form>
+    </div>
+</div>
