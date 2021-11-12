@@ -11,8 +11,10 @@ import { PropertyService } from './services/property-service.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import { LogInComponent } from './components/log-in/log-in.component';
 import { DetailPageComponent } from './components/detail-page/detail-page.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UploadPropertyComponent } from './components/upload-property/upload-property.component';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+
 
 @NgModule({
   declarations: [
@@ -21,13 +23,16 @@ import { UploadPropertyComponent } from './components/upload-property/upload-pro
     BodyComponent,
     LogInComponent,
     DetailPageComponent,
-    UploadPropertyComponent
+    UploadPropertyComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule
   ],
   providers: [PropertyService],
   bootstrap: [AppComponent]
