@@ -1,10 +1,13 @@
 <body class="text-center">
+
   <div *ngIf="isLoading">
     <app-loading-spinner></app-loading-spinner>
   </div>
     <form #authForm="ngForm" (ngSubmit)="onSignup(authForm)" *ngIf="!isLoading">
         <img class="mb-4" src="../../../assets/HouseCryptLogo.png" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <div class="alert alert-danger" *ngIf="errorMessage != ''"><p>{{ errorMessage }}</p></div>
+
         <label for="email" class="sr-only">Email address</label>
         <input type="email"
          id="email" 

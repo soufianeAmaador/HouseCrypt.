@@ -1,0 +1,31 @@
+<div class="">
+  <div class="bg-overlay">
+    <img class="rounded-circle shadow-lg img-thumbnail mx-auto d-block Profile-picture" alt="50x50" src="https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+    data-holder-rendered="true">
+  </div>
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" (click)="onTabClicked(1)" [ngClass]="{'active': index === 1}">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"  (click)="onTabClicked(2)" [ngClass]="{'active': index === 2}">Your ads</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"  (click)="onTabClicked(3)" [ngClass]="{'active': index === 3}">Biddings</a>
+        </li>
+    </ul>
+
+</div>
+
+<div class="container tabbar-contents">
+  <div class="profile-detail" *ngIf = "index == 1">
+    <app-profile-detail></app-profile-detail>
+  </div>
+  <div class="your-ads" *ngIf = "index == 2">
+    <h1> Your ads should be displayed here!</h1>
+  </div>
+  <div class="biddings" *ngIf = "index == 3">
+    <h1> your biddings should be here!</h1>
+  </div>
+</div>

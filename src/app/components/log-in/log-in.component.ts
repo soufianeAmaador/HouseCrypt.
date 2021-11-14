@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { Token } from '../../models/token';
 
@@ -12,8 +13,9 @@ import { Token } from '../../models/token';
 export class LogInComponent implements OnInit {
   isLoginMode = true;
   isLoading = false;
+  errorMessage: string = "";
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -31,9 +33,11 @@ export class LogInComponent implements OnInit {
         console.log(token);
         document.cookie = `token=${token}`;
         this.isLoading = false;
+        this.router.navigate([ '/profile']);
       },
-      error => {
-      console.log(error);
+      errorRes => {
+      console.log(errorRes);
+      this.errorMessage = "An error has occured: " + errorRes.error;
       this.isLoading = false;
       }
     );
