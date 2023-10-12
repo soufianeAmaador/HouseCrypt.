@@ -14,9 +14,9 @@ import { DetailPageComponent } from './components/detail-page/detail-page.compon
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UploadPropertyComponent } from './components/upload-property/upload-property.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
-import { ProfileComponent } from './profile/profile.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { ProfileDetailComponent } from './profile-detail/profile-detail.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ProfileDetailComponent } from './components/profile-detail/profile-detail.component'; 
  
 
 @NgModule({

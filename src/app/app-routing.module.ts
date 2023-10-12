@@ -4,8 +4,8 @@ import { BodyComponent } from './components/body/body.component';
 import { DetailPageComponent } from './components/detail-page/detail-page.component';
 import { LogInComponent } from './components/log-in/log-in.component';
 import { UploadPropertyComponent } from './components/upload-property/upload-property.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { ProfileComponent } from './profile/profile.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   {path: '', component: BodyComponent},
