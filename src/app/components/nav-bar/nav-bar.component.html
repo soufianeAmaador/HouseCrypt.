@@ -15,7 +15,8 @@
         <a class="nav-link disabled" href="#">Faucet</a>
       </li>
       <li class="nav-item" class={{addPadding}}>
-        <a class="nav-link" [routerLink]="['/login']">Log in</a>
+        <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']">Connect</a>
+        <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/']">{{this.connectedUser}}</a>
       </li>
     </ul>
 

@@ -1,23 +1,33 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { BodyComponent } from './components/body/body.component';
-import { DetailPageComponent } from './components/detail-page/detail-page.component';
-import { LogInComponent } from './components/log-in/log-in.component';
-import { UploadPropertyComponent } from './components/upload-property/upload-property.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { ProfileComponent } from './components/profile/profile.component';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { BodyComponent } from "./components/body/body.component";
+import { DetailPageComponent } from "./components/detail-page/detail-page.component";
+import { LogInComponent } from "./components/log-in/log-in.component";
+import { UploadPropertyComponent } from "./components/upload-property/upload-property.component";
+import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
+import { ProfileComponent } from "./components/profile/profile.component";
+import { isUserLoggedInGuard } from "./services/auth-guard.service";
 
 const routes: Routes = [
-  {path: '', component: BodyComponent},
-  {path: 'property', component: DetailPageComponent},
-  {path: 'login', component: LogInComponent},
-  {path: 'upload', component: UploadPropertyComponent},
-  {path: 'profile', component: ProfileComponent},
-  {path: '**', component: PageNotFoundComponent}];
-
+  { path: "", component: BodyComponent },
+  { path: "home", redirectTo: "" },
+  { path: "property", component: DetailPageComponent },
+  { path: "login", component: LogInComponent },
+  {
+    path: "upload",
+    component: UploadPropertyComponent,
+    canActivate: [isUserLoggedInGuard],
+  },
+  {
+    path: "profile",
+    component: ProfileComponent,
+    canActivate: [isUserLoggedInGuard],
+  },
+  { path: "**", component: PageNotFoundComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

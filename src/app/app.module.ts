@@ -9,7 +9,6 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { BodyComponent } from './components/body/body.component';
 import { PropertyService } from './services/property-service.service';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import { LogInComponent } from './components/log-in/log-in.component';
 import { DetailPageComponent } from './components/detail-page/detail-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UploadPropertyComponent } from './components/upload-property/upload-property.component';
@@ -17,6 +16,8 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { ProfileComponent } from './components/profile/profile.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ProfileDetailComponent } from './components/profile-detail/profile-detail.component'; 
+import { LogInComponent } from './components/log-in/log-in.component';
+import { JWT_OPTIONS, JwtHelperService, JwtModule, JwtModuleOptions } from '@auth0/angular-jwt';
  
 
 @NgModule({
@@ -40,7 +41,10 @@ import { ProfileDetailComponent } from './components/profile-detail/profile-deta
     FormsModule,
     HttpClientModule
   ],
-  providers: [PropertyService],
+  providers: [PropertyService,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+        JwtHelperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

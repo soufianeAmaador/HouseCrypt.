@@ -3,7 +3,7 @@
   <div *ngIf="isLoading">
     <app-loading-spinner></app-loading-spinner>
   </div>
-    <form #authForm="ngForm" (ngSubmit)="onSignup(authForm)" *ngIf="!isLoading">
+    <form #authForm="ngForm" (ngSubmit)="connectWallet()" *ngIf="!isLoading">
         <img class="mb-4" src="../../../assets/HouseCryptLogo.png" alt="" width="72" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <div class="alert alert-danger" *ngIf="errorMessage != ''"><p>{{ errorMessage }}</p></div>
@@ -35,8 +35,8 @@
           </label>
         </div>
         <button class="btn btn-lg btn-primary btn-block"  type="submit" [disabled]="!authForm.valid">{{isLoginMode ? 'Login' : 'Sign Up'}}</button> 
-        <button class="btn btn-lg btn-primary" type="button">Switch it up</button>
+        <button class="btn btn-lg btn-primary" type="button">null</button>
 
-        <p class="mt-5 mb-3 text-muted">© HouseCrypt. 2021-2022</p>
+        <p class="mt-5 mb-3 text-muted">© HouseCrypt. 2021-2023</p>
       </form>
 </body>
