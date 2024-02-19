@@ -1,24 +1,23 @@
-import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgModule } from "@angular/core";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule } from "@angular/platform-browser";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { BodyComponent } from './components/body/body.component';
-import { PropertyService } from './services/property-service.service';
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import { DetailPageComponent } from './components/detail-page/detail-page.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UploadPropertyComponent } from './components/upload-property/upload-property.component';
-import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { ProfileDetailComponent } from './components/profile-detail/profile-detail.component'; 
-import { LogInComponent } from './components/log-in/log-in.component';
-import { JWT_OPTIONS, JwtHelperService, JwtModule, JwtModuleOptions } from '@auth0/angular-jwt';
- 
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { NavBarComponent } from "./components/nav-bar/nav-bar.component";
+import { BodyComponent } from "./components/body/body.component";
+import { PropertyService } from "./services/property-service.service";
+import { HttpClientModule } from "@angular/common/http";
+import { DetailPageComponent } from "./components/detail-page/detail-page.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { UploadPropertyComponent } from "./components/upload-property/upload-property.component";
+import { LoadingSpinnerComponent } from "./components/loading-spinner/loading-spinner.component";
+import { ProfileComponent } from "./components/profile/profile.component";
+import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
+import { ProfileDetailComponent } from "./components/profile-detail/profile-detail.component";
+import { LogInComponent } from "./components/log-in/log-in.component";
+import { EthereumService } from "./services/ethereum.service";
 
 @NgModule({
   declarations: [
@@ -31,7 +30,7 @@ import { JWT_OPTIONS, JwtHelperService, JwtModule, JwtModuleOptions } from '@aut
     LoadingSpinnerComponent,
     ProfileComponent,
     PageNotFoundComponent,
-    ProfileDetailComponent
+    ProfileDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,12 +38,9 @@ import { JWT_OPTIONS, JwtHelperService, JwtModule, JwtModuleOptions } from '@aut
     NgbModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
-  providers: [PropertyService,
-    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-        JwtHelperService],
-  bootstrap: [AppComponent]
+  providers: [PropertyService, EthereumService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
-
+export class AppModule {}

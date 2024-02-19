@@ -1,87 +1,162 @@
-import { HttpBackend } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { JwtHelperService } from "@auth0/angular-jwt";
-import { Subject } from "rxjs";
+import { ethers } from "ethers";
+
+import { SiweMessage } from "siwe";
+import { Observable, Subject, firstValueFrom, Subscription } from "rxjs";
+import { User } from "../models/User";
+import { EthereumService } from "./ethereum.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthService implements OnInit {
-  public isLoggedIn: boolean = false;
-  private isInstalled: boolean = false;
   private redirectUrl: string | null = null;
+  private loginStatus = new Subject<boolean>();
   public walletAddress = new Subject<string>();
+  private ethereumSubscription!: Subscription;
+
+  domain = window.location.host;
+  origin = window.location.origin;
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+
+  private readonly baseUrl = "http://localhost:5050";
+  private readonly nonceUrl = `${this.baseUrl}/nonce`;
+  private readonly verifyUrl = `${this.baseUrl}/verify`;
+  private readonly checkLoginUrl = `${this.baseUrl}/check-login`;
+  private readonly refreshAccessTokenUrl = `${this.baseUrl}/refresh-access-token`;
+  private readonly logoutUrl = `${this.baseUrl}/log-out`;
 
   constructor(
-    private jwtHelper: JwtHelperService,
-    private http: HttpBackend,
-    private router: Router
+    private http: HttpClient,
+    private router: Router,
+    private ethereumService: EthereumService
   ) {
     this.isConnected().then((_isConnected) => {
-      if (_isConnected) this.connectWallet();
+      if (!_isConnected) this.connectWallet();
     });
   }
 
   ngOnInit(): void {
-    window.ethereum.on("accountsChanged", this.onAccountsChanged);
-  }
-
-  //TODO create an intermediary that decides to redirect
-  public async redirectAfterLogIn() {
-    //If connection is successful, redirect to desired URL or home
-    await this.connectWallet();
-    if (await this.isConnected()) {
-      if (this.redirectUrl) {
-        this.router.navigate([this.redirectUrl]);
-        this.redirectUrl = null;
-      } else {
-        this.router.navigate(["/home"]);
+    this.ethereumSubscription = this.ethereumService.accountsChanged.subscribe(
+      (accounts: string[]) => {
+        console.log("on accounts changed");
+        console.log("accounts have changed! " + accounts);
+        accounts.length === 0 ? this.logOut() : this.connectWallet();
       }
-    }
+    );
   }
 
-  //TODO finish this function
-  public isAuthenticated(url: string | null): boolean {
-    //const token = localStorage.getItem("token");
-    // Check whether the token is expired and return
-    // true or false
-    //if (this.jwtHelper.isTokenExpired(token)) return true;
-    if (this.isLoggedIn) return true;
+  setRedirectUrl(url: string): void {
     this.redirectUrl = url;
+  }
 
-    //navigate login page
-    this.redirectAfterLogIn();
+  getRedirectUrl(): string | null {
+    return this.redirectUrl;
+  }
 
-    return false;
+  clearRedirectUrl(): void {
+    this.redirectUrl = null;
+  }
+
+  checkLogin(): Observable<JSON> {
+    return this.http.get<JSON>(this.checkLoginUrl, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
+  }
+
+  loginSuccessful(): void {
+    this.loginStatus.next(true);
+  }
+
+  getLoginStatus(): Observable<boolean> {
+    return this.loginStatus.asObservable();
   }
 
   //web3login to be implemented here
   public async connectWallet() {
     if (typeof window != "undefined" && window.ethereum != "undefined") {
-      // if MetaMask is installed
-      await window.ethereum
-        .request({
+      try {
+        // if MetaMask is installed
+        const accounts: string[] = await window.ethereum.request({
           method: "eth_requestAccounts",
-        })
-        .then((_accounts: string[]) => {
-          this.walletAddress.next(_accounts[0]);
-          this.isLoggedIn = true;
-        })
-        .catch((error: { code: number }) => {
-          if (error.code === 4001) {
-            // MetaMask is not installed
-            window.alert("Metamask is not installed!");
-          } else {
-            console.error(error);
-          }
         });
+
+        this.walletAddress.next(accounts[0]);
+        localStorage.setItem("currentuser", accounts[0]);
+
+        await this.signInWithEthereum()
+          .then(() => this.sendForVerification())
+          .catch((error) => {
+            window.alert(error);
+          });
+
+        this.loginStatus.next(true);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (error.code === 4001) {
+          // MetaMask is not installed
+          window.alert("Metamask is not installed!");
+        } else {
+          console.error(error);
+        }
+      }
     } else {
-      this.isLoggedIn = false;
+      this.loginStatus.next(false);
     }
   }
 
-  public onAccountsChanged(accounts: string[]) {
-    console.log("accounts has changed!");
-    accounts.length === 0 ? this.disconnectWallet() : this.connectWallet();
+  private getNonce(): Observable<string> {
+    return this.http.get(this.nonceUrl, {
+      responseType: "text",
+    });
+  }
+
+  public async createSiweMessage(
+    address: string,
+    statement: string
+  ): Promise<string> {
+    const nonce = await firstValueFrom(this.getNonce());
+
+    const message = new SiweMessage({
+      domain: this.domain,
+      address: address,
+      statement: statement,
+      uri: this.origin,
+      version: "1",
+      chainId: 1,
+      nonce: nonce,
+    });
+
+    return message.prepareMessage();
+  }
+
+  message: string | null = null;
+  signature: string | null = null;
+
+  public async signInWithEthereum() {
+    const signer = this.provider.getSigner();
+
+    this.message = await this.createSiweMessage(
+      await signer.getAddress(),
+      "Sign in with Ethereum to the app."
+    );
+    this.signature = await signer.signMessage(this.message);
+  }
+
+  public async sendForVerification() {
+    this.http
+      .post<User>(
+        this.verifyUrl,
+        JSON.stringify({ message: this.message, signature: this.signature }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      )
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
   public async isConnected(): Promise<boolean> {
@@ -94,10 +169,36 @@ export class AuthService implements OnInit {
     return _isConnected;
   }
 
-  public async disconnectWallet() {
-    this.isLoggedIn = false;
-    this.walletAddress.next("");
+  public async logOut() {
+    this.http
+      .get<JSON>(this.logoutUrl, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      })
+      .subscribe({
+        next: () => {
+          this.loginStatus.next(false);
+          this.walletAddress.next("");
+          localStorage.removeItem("currentuser");
+        },
+        error: (error) => {
+          window.alert("Failed during server logout" + error);
+        },
+      });
   }
 
-  public logOut() {}
+  public async refreshAccessToken() {
+    // User must be logged in and ethereum address must be present in oreder to refresh token
+    const address = await this.provider.getSigner().getAddress()
+    if(address.length <= 0){
+      console.error("Sign in with your ethereum account first!");
+      this.router.navigate(["/login"]);
+    }
+
+    return this.http
+      .post<JSON>(this.refreshAccessTokenUrl, JSON.stringify({ address: address}),{
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+  }
 }

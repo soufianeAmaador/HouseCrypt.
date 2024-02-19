@@ -8,7 +8,7 @@ import { AuthService } from "src/app/services/auth-service.service";
   styleUrls: ["./nav-bar.component.scss"],
 })
 export class NavBarComponent implements OnInit, OnDestroy {
-  private subscription: Subscription = new Subscription();
+  private subscription!: Subscription;
   isCollapsed: string = "collapse";
   addPadding: string = "ps-5";
   isLoggedIn: boolean = false;
@@ -17,6 +17,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+    const currentUser = localStorage.getItem("currentuser");
+    if (
+      currentUser !== undefined &&
+      currentUser !== null &&
+      currentUser.length > 0
+    )
+      this.toggleLogIn(currentUser);
     this.subscription = this.authService.walletAddress.subscribe(
       (walletAddress: string) => {
         walletAddress.length > 0
@@ -46,6 +53,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   toggleLogOut() {
+    console.log("toggle log out pressed");
+    this.authService.logOut();
     this.isLoggedIn = false;
     this.connectedUser = "";
   }

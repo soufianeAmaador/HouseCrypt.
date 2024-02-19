@@ -1,9 +1,21 @@
-<nav class="navbar navbar-expand-lg navbar-light px-md-4 sticky-top" style="background-color: #CBC3E3;">
+<nav
+  class="navbar navbar-expand-lg navbar-light px-md-4 sticky-top"
+  style="background-color: #cbc3e3"
+>
   <a class="navbar-brand" href="#">HouseCrypt.</a>
-  <button (click)="toggleNavBar()"class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <button
+    (click)="toggleNavBar()"
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class={{isCollapsed}} class="navbar-collapse" id="navbarNav">
+  <div class="{{ isCollapsed }}" class="navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ms-auto">
       <li class="nav-item active">
         <a class="nav-link" href="#">Home</a>
@@ -14,11 +26,18 @@
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Faucet</a>
       </li>
-      <li class="nav-item" class={{addPadding}}>
-        <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']">Connect</a>
-        <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/']">{{this.connectedUser}}</a>
+      <li class="nav-item" class="{{ addPadding }}">
+        <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']"
+          >Connect</a
+        >
+        <a
+          *ngIf="isLoggedIn"
+          (click)="toggleLogOut()"
+          class="nav-link"
+          [routerLink]="['/']"
+          >{{ this.connectedUser }}</a
+        >
       </li>
     </ul>
-
   </div>
 </nav>

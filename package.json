@@ -25,8 +25,10 @@
     "@web3auth/base": "^7.0.4",
     "@web3auth/modal": "^7.0.5",
     "bootstrap": "^5.2.3",
+    "ethers": "^5.7.2",
     "prettier": "^2.8.8",
     "rxjs": "~7.8.0",
+    "siwe": "^2.1.4",
     "tslib": "^2.3.0",
     "web3": "^4.2.1",
     "zone.js": "~0.13.0"
