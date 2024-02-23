@@ -7,6 +7,7 @@ import { SiweMessage } from "siwe";
 import { Observable, Subject, firstValueFrom, Subscription } from "rxjs";
 import { User } from "../models/User";
 import { EthereumService } from "./ethereum.service";
+import { ErrorHandlerService } from "./error-handler.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthService implements OnInit {
@@ -29,7 +30,8 @@ export class AuthService implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private ethereumService: EthereumService
+    private ethereumService: EthereumService,
+    private errorHandlerService: ErrorHandlerService
   ) {
     this.isConnected().then((_isConnected) => {
       if (!_isConnected) this.connectWallet();
@@ -89,6 +91,7 @@ export class AuthService implements OnInit {
           .then(() => this.sendForVerification())
           .catch((error) => {
             window.alert(error);
+            this.errorHandlerService.handleError(error);
           });
 
         this.loginStatus.next(true);
@@ -96,13 +99,14 @@ export class AuthService implements OnInit {
       } catch (error: any) {
         if (error.code === 4001) {
           // MetaMask is not installed
-          window.alert("Metamask is not installed!");
+          this.errorHandlerService.handleError("Metamask is not installed!");
         } else {
-          console.error(error);
+          this.errorHandlerService.handleError(error);
         }
+        await this.logOut();
       }
     } else {
-      this.loginStatus.next(false);
+      await this.logOut();
     }
   }
 
@@ -135,13 +139,18 @@ export class AuthService implements OnInit {
   signature: string | null = null;
 
   public async signInWithEthereum() {
-    const signer = this.provider.getSigner();
+    try{
+      const signer = this.provider.getSigner();
 
-    this.message = await this.createSiweMessage(
-      await signer.getAddress(),
-      "Sign in with Ethereum to the app."
-    );
-    this.signature = await signer.signMessage(this.message);
+      this.message = await this.createSiweMessage(
+        await signer.getAddress(),
+        "Sign in with Ethereum to Housecrypt."
+      );
+      this.signature = await signer.signMessage(this.message);
+    }catch(error) {
+      this.errorHandlerService.handleError("Metamask signature interrupted, try again!");
+      this.logOut();
+    }
   }
 
   public async sendForVerification() {
@@ -182,7 +191,7 @@ export class AuthService implements OnInit {
           localStorage.removeItem("currentuser");
         },
         error: (error) => {
-          window.alert("Failed during server logout" + error);
+          this.errorHandlerService.handleError(error);
         },
       });
   }

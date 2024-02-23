@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BathroomAmenities, PropertySpecs, Services, TypeOfHome, TypeOfRoof } from 'src/app/models/PropertySpecs';
+import { BathroomAmenities, Services, TypeOfHome, TypeOfRoof } from 'src/app/models/PropertySpecs';
 
 @Component({
   selector: 'app-upload-property',

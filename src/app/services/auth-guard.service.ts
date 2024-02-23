@@ -7,6 +7,7 @@ import {
   RouterStateSnapshot,
 } from "@angular/router";
 import { AuthService } from "./auth-service.service";
+import { ErrorHandlerService } from "./error-handler.service";
 
 export const isUserLoggedInGuard = async (
   route: ActivatedRouteSnapshot,
@@ -14,6 +15,7 @@ export const isUserLoggedInGuard = async (
 ) => {
   const auth = inject(AuthService);
   const router = inject(Router);
+  const errorHandler = inject(ErrorHandlerService)
 
   try {
     await firstValueFrom(auth.checkLogin());
@@ -21,23 +23,20 @@ export const isUserLoggedInGuard = async (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
 
-    const errorJson = JSON.stringify(error.error);
-    const parsedJsonError = JSON.parse(errorJson);
-
+    // For some reason, this is the only way error objects are able to be extracted
+    const parsedJsonError = JSON.parse(JSON.stringify(error.error));
+    errorHandler.handleError(parsedJsonError);
     // Token is expired or no token is provided
     if (parsedJsonError.error && parsedJsonError.error.code === "ACCESSTOKEN_INVALID_OR_EXPIRED") {
-      console.log("ACCESSTOKEN_INVALID_OR_EXPIRED");
 
       (await auth.refreshAccessToken()).subscribe({
         next: () => {
-          console.log("refreshroken successful!");
-          console.log("redirectURl: " + state.url);
           router.navigate([state.url]);
           return true;
         },
         error: (error) => {
           console.log("after accestoken isn't valid, so is the refreshtoken");
-          window.alert(JSON.parse(JSON.stringify(error.error)).error.code);
+          errorHandler.handleError(JSON.parse(JSON.stringify(error.error)));
           router.navigate(["/login"]);
         },
       });
@@ -46,13 +45,10 @@ export const isUserLoggedInGuard = async (
       parsedJsonError.error &&
       parsedJsonError.error.code === "SESSIONTOKEN_INVALID_OR_EXPIRED"
     ) {
-      console.log("SESSIONTOKEN_INVALID_OR_EXPIRED");
       // redirect to the login page
       router.navigate(["/login"]);
     } else {
-      console.log("test2");
-      console.error(parsedJsonError.error.message);
-      window.alert(error.error?.message);
+      errorHandler.handleError(JSON.parse(JSON.stringify(error.error)));
 
       // redirect to the login page
       router.navigate(["/login"]);

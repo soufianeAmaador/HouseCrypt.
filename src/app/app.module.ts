@@ -2,7 +2,8 @@ import { NgModule } from "@angular/core";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 import { BrowserModule } from "@angular/platform-browser";
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { NavBarComponent } from "./components/nav-bar/nav-bar.component";
@@ -18,6 +19,7 @@ import { PageNotFoundComponent } from "./components/page-not-found/page-not-foun
 import { ProfileDetailComponent } from "./components/profile-detail/profile-detail.component";
 import { LogInComponent } from "./components/log-in/log-in.component";
 import { EthereumService } from "./services/ethereum.service";
+import { ErrorHandlerService } from "./services/error-handler.service";
 
 @NgModule({
   declarations: [
@@ -39,8 +41,11 @@ import { EthereumService } from "./services/ethereum.service";
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(),
   ],
-  providers: [PropertyService, EthereumService],
+  providers: [PropertyService, EthereumService, ErrorHandlerService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
