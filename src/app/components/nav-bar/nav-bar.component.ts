@@ -15,6 +15,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   connectedUser: string = "";
 
   constructor(private authService: AuthService) {}
+  
 
   ngOnInit(): void {
     const currentUser = localStorage.getItem("currentuser");
@@ -53,9 +54,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   toggleLogOut() {
-    console.log("toggle log out pressed");
-    this.authService.logOut();
     this.isLoggedIn = false;
     this.connectedUser = "";
+    this.authService.logOut();
   }
 }

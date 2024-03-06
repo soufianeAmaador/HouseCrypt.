@@ -1,42 +1,12 @@
-<body class="text-center">
-
-  <div *ngIf="isLoading">
-    <app-loading-spinner></app-loading-spinner>
-  </div>
-    <form #authForm="ngForm" (ngSubmit)="connectWallet()" *ngIf="!isLoading">
-        <img class="mb-4" src="../../../assets/HouseCryptLogo.png" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <div class="alert alert-danger" *ngIf="errorMessage != ''"><p>{{ errorMessage }}</p></div>
-
-        <label for="email" class="sr-only">Email address</label>
-        <input type="email"
-         id="email" 
-         class="form-control" 
-         ngModel
-         name="email" 
-         placeholder="Email address" 
-         required 
-         email 
-         />
-        <label for="password" class="sr-only">Password</label>
-        <input 
-        type="password" 
-        id="password" 
-        class="form-control" 
-        ngModel
-        name="password"
-        required
-        placeholder="Password" 
-        minlength="6"
-        />
-        <div class="checkbox mb-3">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card border-0 bg-light" style="width: 18rem;">
+            <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png" alt="Card image cap">
+            <div class="card-body text-center">
+                <h5 class="card-title">Connect Wallet</h5>
+                <p class="card-text">Connect your wallet with Metamask to either login or create a new account.</p>
+                <a href="#" class="btn btn-primary">Connect</a>
+            </div>
         </div>
-        <button class="btn btn-lg btn-primary btn-block"  type="submit" [disabled]="!authForm.valid">{{isLoginMode ? 'Login' : 'Sign Up'}}</button> 
-        <button class="btn btn-lg btn-primary" type="button">null</button>
-
-        <p class="mt-5 mb-3 text-muted">© HouseCrypt. 2021-2023</p>
-      </form>
-</body>
+    </div>
+</div>
