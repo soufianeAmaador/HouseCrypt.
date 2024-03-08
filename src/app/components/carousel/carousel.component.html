@@ -22,5 +22,15 @@
               <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Next</span>
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
           </button>
+
+          <div class="carousel-indicators">
+            <button *ngFor="let item of carouselItems.slice(0, 10); let i = index" 
+            type="button" 
+            [attr.data-bs-target]="'#carousel'" 
+            [attr.data-bs-slide-to]="i" 
+            [class.active]="i === 0" 
+            attr.aria-label="Slide {{i + 1}}">
+    </button>
+          </div>
     </div>
 </div>
