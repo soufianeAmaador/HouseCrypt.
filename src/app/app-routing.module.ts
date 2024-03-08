@@ -7,6 +7,7 @@ import { UploadPropertyComponent } from "./components/upload-property/upload-pro
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { isUserLoggedInGuard } from "./services/auth-guard.service";
+import { ProjectDetailComponent } from "./project-detail/project-detail.component";
 
 const routes: Routes = [
   { path: "", component: BodyComponent },
@@ -22,6 +23,10 @@ const routes: Routes = [
     path: "profile",
     component: ProfileComponent,
     canActivate: [isUserLoggedInGuard],
+  },
+  {
+    path: "project",
+    component: ProjectDetailComponent
   },
   { path: "**", component: PageNotFoundComponent },
 ];

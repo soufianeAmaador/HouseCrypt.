@@ -20,6 +20,8 @@ import { ProfileDetailComponent } from "./components/profile-detail/profile-deta
 import { LogInComponent } from "./components/log-in/log-in.component";
 import { EthereumService } from "./services/ethereum.service";
 import { ErrorHandlerService } from "./services/error-handler.service";
+import { ProjectDetailComponent } from './project-detail/project-detail.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { ErrorHandlerService } from "./services/error-handler.service";
     ProfileComponent,
     PageNotFoundComponent,
     ProfileDetailComponent,
+    ProjectDetailComponent,
+    CarouselComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,26 @@
+<div class="container">
+    <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Loop through the carouselItems array and create carousel items -->
+            <div *ngFor="let item of carouselItems; let i = index" class="carousel-item" [class.active]="i === 0">
+                <ng-container *ngIf="item.endsWith('.jpg') || item.endsWith('.png')">
+                    <img [src]="item" class="d-block w-100" alt="Image {{i + 1}}">
+                </ng-container>
+                <ng-container *ngIf="item.endsWith('.mp4') || item.endsWith('.webm')">
+                    <video [src]="item" class="d-block w-100" controls>
+                        Your browser does not support the video tag.
+                    </video>
+                </ng-container>
+            </div>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+              <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Next</span>
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+    </div>
+</div>

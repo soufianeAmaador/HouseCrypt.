@@ -1,0 +1,44 @@
+<body>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <h1>Your Project Title</h1>
+          <p>Description of your project goes here. Explain what you're creating, why it's unique, and why people should support it.</p>
+  
+          <!-- Include images, videos, or other media related to your project -->
+          <app-carousel [carouselItems]="imagesAndVideos"></app-carousel>
+  
+          <h2>Rewards</h2>
+          <!-- List your reward tiers with details -->
+          <ul>
+            <li>Backer Level 1: $10 - Description of reward 1</li>
+            <li>Backer Level 2: $25 - Description of reward 2</li>
+            <!-- Add more reward tiers as needed -->
+          </ul>
+  
+          <h2>Project Updates</h2>
+          <!-- Include updates about your project's progress -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Update 1: We Reached 50% Funding!</h5>
+              <p class="card-text">Details about the project update go here.</p>
+            </div>
+          </div>
+  
+          <!-- Add more updates as needed -->
+  
+        </div>
+  
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <!-- Include a call-to-action to support the project -->
+              <h5 class="card-title">Support This Project</h5>
+              <p class="card-text">Help make this project a reality by supporting it today!</p>
+              <a href="#" class="btn btn-primary">Back This Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
