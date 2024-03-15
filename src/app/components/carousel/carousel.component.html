@@ -1,5 +1,5 @@
-<div class="container">
-    <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+<div class="container p-0">
+    <div id="carousel" class="carousel slide shadow" >
         <div class="carousel-inner">
             <!-- Loop through the carouselItems array and create carousel items -->
             <div *ngFor="let item of carouselItems; let i = index" class="carousel-item" [class.active]="i === 0">

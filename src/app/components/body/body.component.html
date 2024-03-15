@@ -1,11 +1,15 @@
 <div class="container p-5">
     <div class="row row-cols-1 g-5">
-        <div class="card col mx-2" style="width: 18rem;" *ngFor="let property of properties">
-            <img class="card-img-top" src={{property.images}} alt="Placehoder image property">
+        <div class="card col mx-2 p-0" style="width: 18rem;" *ngFor="let property of properties">
+            <img class="card-img-top img-fluid" src={{property.images}} alt="Placehoder image property">
             <div class="card-body">
               <h5 class="card-title">{{property.title}}</h5>
               <p class="card-text">{{property.description}}</p>
               <a [routerLink]="['/property']" [queryParams]="{id: property.key}" class="btn btn-primary">Current bid: {{property.askingPrice | currency:'SC '}}</a>
             </div>
-          </div>    
+            <div class="progress" style="width: 18rem; height: 0.3rem;">
+              <div id="progressBar" class="progress-bar" role="progressbar" style="width: 10%; background-color: #CBC3E3;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>    
 </div>
