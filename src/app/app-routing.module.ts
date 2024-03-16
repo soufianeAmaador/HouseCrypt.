@@ -7,7 +7,8 @@ import { UploadPropertyComponent } from "./components/upload-property/upload-pro
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { isUserLoggedInGuard } from "./services/auth-guard.service";
-import { ProjectDetailComponent } from "./project-detail/project-detail.component";
+import { ProjectDetailComponent } from "./components/project-detail/project-detail.component";
+import { UploadProjectComponent } from "./components/upload-project/upload-project.component";
 
 const routes: Routes = [
   { path: "", component: BodyComponent },
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: "project",
     component: ProjectDetailComponent
+  },
+  {
+    path: "create",
+    component: UploadProjectComponent
   },
   { path: "**", component: PageNotFoundComponent },
 ];

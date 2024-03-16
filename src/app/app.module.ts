@@ -20,9 +20,10 @@ import { ProfileDetailComponent } from "./components/profile-detail/profile-deta
 import { LogInComponent } from "./components/log-in/log-in.component";
 import { EthereumService } from "./services/ethereum.service";
 import { ErrorHandlerService } from "./services/error-handler.service";
-import { ProjectDetailComponent } from './project-detail/project-detail.component';
+import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
-import { PledgeModalComponent } from './pledge-modal/pledge-modal.component';
+import { PledgeModalComponent } from './components/pledge-modal/pledge-modal.component';
+import { UploadProjectComponent } from './components/upload-project/upload-project.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { PledgeModalComponent } from './pledge-modal/pledge-modal.component';
     ProjectDetailComponent,
     CarouselComponent,
     PledgeModalComponent,
+    UploadProjectComponent,
   ],
   imports: [
     BrowserModule,

@@ -17,14 +17,14 @@
   </button>
   <div class="{{ isCollapsed }}" class="navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ms-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home</a>
-      </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Offerings</a>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Faucet</a>
+      </li>
+      <li class="nav-item active">
+        <a class="button nav-link border rounded" [routerLink]="['/create']">Start a project</a>
       </li>
       <li class="nav-item" class="{{ addPadding }}">
         <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']"
