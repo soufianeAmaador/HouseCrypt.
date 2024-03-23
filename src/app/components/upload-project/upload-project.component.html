@@ -1,1 +1,40 @@
-<p>upload-project works!</p>
+<div class="container">
+    <div class="py-3 text-center">
+        <h2>Create Your Fundraising Project</h2>
+        <p class="lead">Fill in the form below and upload at least one photo of the property you are selling. Some fields are mandatory in order to submit your advertisement.</p>
+    </div>
+    <!-- Form for project information -->
+    <div class="row">
+        <div class="col-md-6">
+            <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+                <!-- Project Title -->
+                <div class="mb-3">
+                    <label for="projectTitle" class="form-label">Project Title</label>
+                    <input type="text" class="form-control" id="projectTitle" placeholder="Enter project title" formControlName="projectTitle">
+                </div>
+                <!-- Project Description -->
+                <div class="mb-3">
+                    <label for="projectDescription" class="form-label">Project Description</label>
+                    <textarea class="form-control" id="projectDescription" rows="5" placeholder="Enter project description" formControlName="projectDescription"></textarea>
+                </div>
+                <!-- Project Goal -->
+                <div class="mb-3">
+                    <label for="projectGoal" class="form-label">Project Funding Goal ($)</label>
+                    <input type="number" class="form-control" id="projectGoal" placeholder="Enter funding goal" formControlName="projectGoal">
+                </div>
+                <!-- Project Deadline -->
+                <div class="mb-3">
+                    <label for="projectDeadline" class="form-label">Project Deadline</label>
+                    <input type="date" class="form-control" id="projectDeadline" formControlName="projectDeadline">
+                </div>
+                <app-upload-files (filesUploaded)="onFilesUploaded($event)"></app-upload-files>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn" style="color: white; background-color: blueviolet; border-radius: 3px;">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-6 overflow-hidden">
+            <img [src]="image" class="d-block w-75 h-80 mx-5" alt="art"/>
+        </div>
+    </div>
+</div>

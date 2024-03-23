@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path: "upload",
     component: UploadPropertyComponent,
-    canActivate: [isUserLoggedInGuard],
+    // canActivate: [isUserLoggedInGuard],
   },
   {
     path: "profile",

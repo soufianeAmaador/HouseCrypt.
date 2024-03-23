@@ -24,6 +24,7 @@ import { ProjectDetailComponent } from './components/project-detail/project-deta
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { PledgeModalComponent } from './components/pledge-modal/pledge-modal.component';
 import { UploadProjectComponent } from './components/upload-project/upload-project.component';
+import { UploadFilesComponent } from './components/upload-files/upload-files.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { UploadProjectComponent } from './components/upload-project/upload-proje
     CarouselComponent,
     PledgeModalComponent,
     UploadProjectComponent,
+    UploadFilesComponent,
   ],
   imports: [
     BrowserModule,

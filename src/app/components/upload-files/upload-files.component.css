@@ -1,0 +1,29 @@
+.uploaded-media {
+    width: 100px; /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
+    margin-right: 10px; /* Optional: Add margin between previews */
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+
+.delete-button {
+    position: absolute;
+    top: -5px;
+    right: -15px;
+    width: 20px;
+    height: 20px;
+    background-color: #ff0000;
+    opacity: 200%;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
