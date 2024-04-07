@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { UploadProjectService } from 'src/app/services/upload-project.service';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 
 @Component({
   selector: 'app-upload-project',
@@ -16,7 +18,10 @@ export class UploadProjectComponent implements OnInit {
 
 
   image: string = './assets/artist-7250695_1280.jpg' 
-  constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef){
+  constructor(private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef, 
+    private uploadProjectService: UploadProjectService,
+    private errorHandlerService: ErrorHandlerService){
     this.projectForm = this.formBuilder.group({
       projectTitle: ['', Validators.required],
       projectDescription: ['', Validators.required],
@@ -36,31 +41,48 @@ export class UploadProjectComponent implements OnInit {
     this.uploadedVideos = files.videos;
   }
   
-  onSubmit() {
-    const formData = new FormData();
-    formData.append('projectTitle', this.projectForm.get('projectTitle')!.value);
-    formData.append('projectDescription', this.projectForm.get('projectDescription')!.value);
-    formData.append('projectGoal', this.projectForm.get('projectGoal')!.value);
-    formData.append('projectDeadline', this.projectForm.get('projectDeadline')!.value);
+// Function to prepare form data
+prepareFormData(): FormData {
+  const formData = new FormData();
+  formData.append('projectTitle', this.projectForm.get('projectTitle')!.value);
+  formData.append('projectDescription', this.projectForm.get('projectDescription')!.value);
+  formData.append('projectGoal', this.projectForm.get('projectGoal')!.value);
+  formData.append('projectDeadline', this.projectForm.get('projectDeadline')!.value);
 
-    for (const photo of this.uploadedPhotos) {
-      formData.append('projectPhotos', photo);
-    }
-
-    for (const video of this.uploadedVideos) {
-      formData.append('projectVideos', video);
-    }
-
-    formData.forEach((value: FormDataEntryValue, key: string) => {
-      console.log(value, key);
-    })
-
-    // this.http.post('http://localhost:3000/api/projects', formData)
-    //   .subscribe(response => {
-    //     console.log('Form submission successful:', response);
-    //   }, error => {
-    //     console.error('Error submitting form:', error);
-    //   });
+  for (const photo of this.uploadedPhotos) {
+    console.log(photo.name);
+    formData.append('projectPhotos', photo);
   }
+
+  for (const video of this.uploadedVideos) {
+    formData.append('projectVideos', video);
+  }
+
+  return formData;
+}
+
+// Function to handle response from backend
+handleUploadResponse(): void {
+  console.log('Upload successful:');
+  // Handle successful response from backend
+}
+
+// Function to handle error from backend
+handleUploadError(error: any): void {
+  console.error('Error uploading project:', error);
+  // Handle error response from backend
+  this.errorHandlerService.handleError(JSON.parse(JSON.stringify(error.error)));
+}
+
+// Main function for submitting the form
+onSubmit(): void {
+  const formData = this.prepareFormData();
+
+  // Example: Sending projectFormData to the service for uploading
+  this.uploadProjectService.uploadProject(formData).subscribe({
+    next: () => this.handleUploadResponse(),
+    error: (error) => this.handleUploadError(error)
+  });
+}
 
 }

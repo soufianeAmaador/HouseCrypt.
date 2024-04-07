@@ -22,21 +22,6 @@ export class UploadFilesComponent implements OnInit{
   constructor(){}
 
   removeFile(file: any) {
-    // const photos = this.projectForm.get('projectPhotos')!.value;
-    // const videos = this.projectForm.get('projectVideos')!.value;
-    // const files = [...(Array.isArray(photos) ? photos : []), ...(Array.isArray(videos) ? videos : [])];
-      
-    // const index = files.indexOf(file);
-    // if (index !== -1) {
-    //     files.splice(index, 1);
-    //     // Update the form controls after removing the file
-    //     if (Array.isArray(photos)) {
-    //         this.projectForm.get('projectPhotos')!.setValue(photos.filter(item => item !== file));
-    //     }
-    //     if (Array.isArray(videos)) {
-    //         this.projectForm.get('projectVideos')!.setValue(videos.filter(item => item !== file));
-    //     }
-    // }
     this.combinedMedia = this.combinedMedia.filter(f => f !== file);
   }
     
@@ -61,10 +46,7 @@ export class UploadFilesComponent implements OnInit{
         }
               // Update combinedMedia to include newly uploaded files
       }
-      
-      // Set form values after processing all files
-      // this.projectForm.get('projectPhotos')?.setValue(imageFiles);
-      // this.projectForm.get('projectVideos')?.setValue(videoFiles);
+
       this.combinedMedia = [...this.combinedMedia, ...files];
 
       this.filesUploaded.emit({ photos: this.imageFiles, videos: this.videoFiles });
@@ -73,9 +55,6 @@ export class UploadFilesComponent implements OnInit{
   }
 
   getCombinedMedia(): any[] {
-    // const photos = this.projectForm.get('projectPhotos')!.value || [];
-    // const videos = this.projectForm.get('projectVideos')!.value || [];
-    // return [...photos, ...videos];
     return this.combinedMedia;
   }
 
