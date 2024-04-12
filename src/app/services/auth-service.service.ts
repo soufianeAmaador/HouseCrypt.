@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { ethers } from "ethers";
 
 import { SiweMessage } from "siwe";
-import { Observable, Subject, firstValueFrom, Subscription } from "rxjs";
+import { Observable, Subject, firstValueFrom, Subscription, finalize } from "rxjs";
 import { User } from "../models/User";
 import { EthereumService } from "./ethereum.service";
 import { ErrorHandlerService } from "./error-handler.service";
@@ -77,6 +77,7 @@ export class AuthService implements OnInit {
 
   //web3login to be implemented here
   public async connectWallet() {
+    console.log("connectwallet");
     if (typeof window != "undefined" && window.ethereum != "undefined") {
       try {
         // if MetaMask is installed
@@ -184,15 +185,19 @@ export class AuthService implements OnInit {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       })
-      .subscribe({
-        next: () => {
+      .pipe(
+        finalize(() => {
+          // This code will run regardless of whether the request succeeds or fails
           this.loginStatus.next(false);
           this.walletAddress.next("");
           localStorage.removeItem("currentuser");
-        },
+        })
+      )
+      .subscribe({
+        next: () => {},
         error: (error) => {
           this.errorHandlerService.handleError(error);
-        },
+        }
       });
   }
 

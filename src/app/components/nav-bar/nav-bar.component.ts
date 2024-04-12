@@ -9,13 +9,13 @@ import { AuthService } from "src/app/services/auth-service.service";
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
+  private previousWalletAddress: string = ""; // Track the previous walletAddress
   isCollapsed: string = "collapse";
   addPadding: string = "ps-5";
   isLoggedIn: boolean = false;
   connectedUser: string = "";
 
   constructor(private authService: AuthService) {}
-  
 
   ngOnInit(): void {
     const currentUser = localStorage.getItem("currentuser");
@@ -25,11 +25,18 @@ export class NavBarComponent implements OnInit, OnDestroy {
       currentUser.length > 0
     )
       this.toggleLogIn(currentUser);
+
     this.subscription = this.authService.walletAddress.subscribe(
       (walletAddress: string) => {
-        walletAddress.length > 0
-          ? this.toggleLogIn(walletAddress)
-          : this.toggleLogOut();
+        if (walletAddress !== this.previousWalletAddress) {
+          // Only proceed if walletAddress has changed
+          if (walletAddress.length > 0) {
+            this.toggleLogIn(walletAddress);
+          } else {
+            this.toggleLogOut();
+          }
+          this.previousWalletAddress = walletAddress; // Update previousWalletAddress
+        }
       }
     );
   }

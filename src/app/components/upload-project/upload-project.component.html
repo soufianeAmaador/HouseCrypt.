@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="py-3 text-center">
+        <h2>Create Your Fundraising Project</h2>
+        <p class="lead">Transform Your Craft: Monetize Your Art and Embrace Creative Freedom in a decentralized way!</p>
+    </div>
+    <!-- Form for project information -->
+    <div class="row">
+        <div class="col-md-6">
+            <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+                <!-- Project Title -->
+                <div class="mb-3">
+                    <label for="projectTitle" class="form-label">Project Title</label>
+                    <input type="text" class="form-control" id="projectTitle" placeholder="Enter project title" formControlName="projectTitle"
+                        [ngClass]="{ 'is-invalid': projectForm.get('projectTitle')!.invalid && projectForm!.get('projectTitle')!.touched }">
+                    <div class="invalid-feedback" *ngIf="projectForm.get('projectTitle')!.invalid && projectForm.get('projectTitle')!.touched">
+                        Project Title is required
+                    </div>
+                </div>
+                <!-- Project Description -->
+                <div class="mb-3">
+                    <label for="projectDescription" class="form-label">Project Description</label>
+                    <textarea class="form-control" id="projectDescription" rows="5" placeholder="Enter project description" formControlName="projectDescription"
+                    [ngClass]="{ 'is-invalid': projectForm.get('projectDescription')!.invalid && projectForm!.get('projectDescription')!.touched }">
+                </textarea>
+                <div class="invalid-feedback" *ngIf="projectForm.get('projectDescription')!.invalid && projectForm.get('projectDescription')!.touched">
+                    Add a description to your project
+                </div>
+                </div>
+                <!-- Project Goal -->
+                <div class="mb-3">
+                    <label for="projectGoal" class="form-label">Project Funding Goal (ETH)</label>
+                    <input type="number" class="form-control" id="projectGoal" placeholder="Enter funding goal" formControlName="projectGoal"
+                      [ngClass]="{ 'is-invalid': projectForm.get('projectGoal')!.invalid && projectForm!.get('projectGoal')!.touched }">
+                    <div class="invalid-feedback" *ngIf="projectForm.get('projectGoal')!.errors?.['invalidAmount'] && projectForm.get('projectGoal')!.touched">
+                      Amount must be zero or higher
+                    </div>
+                </div>
+                  
+                  
+                <!-- Project Deadline -->
+                <div class="mb-3">
+                    <label for="projectDeadline" class="form-label">Project Deadline</label>
+                    <input type="date" class="form-control" id="projectDeadline" formControlName="projectDeadline"
+                    [ngClass]="{ 'is-invalid': projectForm.get('projectDeadline')!.invalid && projectForm!.get('projectDeadline')!.touched }">
+                    <div class="invalid-feedback" *ngIf="projectForm.get('projectDeadline')!.errors?.['futureDate'] && projectForm.get('projectDeadline')!.touched">
+                      Please select a date in the future
+                    </div>
+                  </div>
+                  
+
+                <app-upload-files (filesUploaded)="onFilesUploaded($event)"></app-upload-files>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn" [disabled]="!projectForm.valid" style="color: white; background-color: blueviolet; border-radius: 3px;">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-6 overflow-hidden">
+            <img [src]="image" class="d-block w-75 h-80 mx-5" alt="art"/>
+        </div>
+    </div>
+</div>
