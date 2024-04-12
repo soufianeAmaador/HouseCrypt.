@@ -1,9 +1,12 @@
-<div class="container">
+<div class="container p-0">
     <!-- Upload Project Photos -->
     <div class="mb-3">
-        <label for="projectMedia" class="form-label">Upload Project Media</label>
+        <label for="projectMedia" class="form-label">Upload Project Media <span class="text-muted small mx-2">(<i>Images: 10  Videos: 5</i>)</span></label>
         <input type="file" class="form-control" id="projectMedia" accept="image/*,video/*" (change)="onFileChange($event)" multiple>
     </div>
+
+    <div class="notification" *ngIf="showNotification">{{ notificationMessage }}</div>
+
         <!-- Display Uploaded Media -->
         <div class="row bg-light">
             <div *ngFor="let file of getCombinedMedia()" class="col-md-2 image-container">

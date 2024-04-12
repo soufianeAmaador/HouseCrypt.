@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { UploadProjectService } from 'src/app/services/upload-project.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 
@@ -25,8 +25,8 @@ export class UploadProjectComponent implements OnInit {
     this.projectForm = this.formBuilder.group({
       projectTitle: ['', Validators.required],
       projectDescription: ['', Validators.required],
-      projectGoal: [null, Validators.required],
-      projectDeadline: ['', Validators.required],
+      projectGoal: [null, [Validators.required, this.zeroOrPositiveValidator()]],
+      projectDeadline: ['', [Validators.required, this.futureDateValidator()]],
       projectPhotos: [null],
       projectVideos: [null]
     })
@@ -77,12 +77,39 @@ handleUploadError(error: any): void {
 // Main function for submitting the form
 onSubmit(): void {
   const formData = this.prepareFormData();
-
-  // Example: Sending projectFormData to the service for uploading
+  if(this.projectForm.valid){
+      // Example: Sending projectFormData to the service for uploading
   this.uploadProjectService.uploadProject(formData).subscribe({
     next: () => this.handleUploadResponse(),
     error: (error) => this.handleUploadError(error)
   });
+  }else{
+    this.errorHandlerService.handleError("Form is incorrect, please fill the form correctly");
+  }
+}
+
+zeroOrPositiveValidator() {
+  return (control: { value: number }) => {
+    if (control.value !== null && (isNaN(control.value) || control.value < 0)) {
+      return { 'invalidAmount': true };
+    }
+    return null;
+  };
+}
+
+futureDateValidator() {
+  return (control: AbstractControl) => {
+    const selectedDate: Date = new Date(control.value);
+    const currentDate = new Date();
+    
+    selectedDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
+        
+    if (selectedDate <= currentDate) {
+      return { 'futureDate': true }; 
+    }
+    return null;
+  };
 }
 
 }

@@ -31,7 +31,8 @@ const routes: Routes = [
   },
   {
     path: "create",
-    component: UploadProjectComponent
+    component: UploadProjectComponent,
+    canActivate: [isUserLoggedInGuard],
   },
   { path: "**", component: PageNotFoundComponent },
 ];

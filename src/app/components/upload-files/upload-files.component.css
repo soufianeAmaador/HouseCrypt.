@@ -1,7 +1,7 @@
 .uploaded-media {
-    width: 100px; /* Adjust as needed */
-    height: 100px; /* Adjust as needed */
-    margin-right: 10px; /* Optional: Add margin between previews */
+    width: 90px; /* Adjust as needed */
+    height: 90px; /* Adjust as needed */
+    margin-right: 5px; /* Optional: Add margin between previews */
 }
 
 .image-container {
@@ -11,12 +11,13 @@
 
 
 .delete-button {
-    position: absolute;
-    top: -5px;
-    right: -15px;
+    position: relative;
+    z-index: 9999;
+    top: -100px;
+    right: -80px;
     width: 20px;
     height: 20px;
-    background-color: #ff0000;
+    background-color: #a89e9e83;
     opacity: 200%;
     color: #ffffff;
     border: none;
@@ -27,3 +28,13 @@
     align-items: center;
     font-size: 12px;
 }
+
+.notification {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
