@@ -20,39 +20,36 @@ export const isUserLoggedInGuard = async (
   try {
     await firstValueFrom(auth.checkLogin());
     return true;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-
-    // For some reason, this is the only way error objects are able to be extracted
     const parsedJsonError = JSON.parse(JSON.stringify(error.error));
-    errorHandler.handleError(parsedJsonError);
-    // Token is expired or no token is provided
     if (parsedJsonError.error && parsedJsonError.error.code === "ACCESSTOKEN_INVALID_OR_EXPIRED") {
-
-      (await auth.refreshAccessToken()).subscribe({
-        next: () => {
-          router.navigate([state.url]);
-          return true;
-        },
-        error: (error) => {
-          console.log("after accestoken isn't valid, so is the refreshtoken");
-          errorHandler.handleError(JSON.parse(JSON.stringify(error.error)));
-          router.navigate(["/login"]);
-        },
+      return new Promise<boolean>(async (resolve, reject) => {
+        (await auth.refreshAccessToken()).subscribe({
+          next: () => {
+            console.log("here toch");
+            router.navigate([state.url]);
+            resolve(true); // Resolve the promise with true
+          },
+          error: (error) => {
+            errorHandler.handleError(JSON.parse(JSON.stringify(error.error)));
+            router.navigate(["/login"]);
+            reject(false); // Reject the promise with false
+          },
+        });
       });
-
     } else if (
       parsedJsonError.error &&
       parsedJsonError.error.code === "SESSIONTOKEN_INVALID_OR_EXPIRED"
     ) {
-      // redirect to the login page
+      // Redirect to the login page
       router.navigate(["/login"]);
+      return false;
     } else {
       errorHandler.handleError(JSON.parse(JSON.stringify(error.error)));
-
-      // redirect to the login page
+      // Redirect to the login page
       router.navigate(["/login"]);
+      return false;
     }
-    return false;
   }
+  
 };
