@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UploadProjectService {
+export class ProjectService {
 
   private readonly baseUrl = "http://localhost:5050";
   private readonly uploadProjectUrl = `${this.baseUrl}/upload-project`;

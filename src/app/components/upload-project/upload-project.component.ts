@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
-import { UploadProjectService } from 'src/app/services/upload-project.service';
+import { ProjectService } from 'src/app/services/project.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class UploadProjectComponent implements OnInit {
   image: string = './assets/artist-7250695_1280.jpg' 
   constructor(private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef, 
-    private uploadProjectService: UploadProjectService,
+    private ProjectService: ProjectService,
     private errorHandlerService: ErrorHandlerService){
     this.projectForm = this.formBuilder.group({
       projectTitle: ['', Validators.required],
@@ -79,7 +79,7 @@ onSubmit(): void {
   const formData = this.prepareFormData();
   if(this.projectForm.valid){
       // Example: Sending projectFormData to the service for uploading
-  this.uploadProjectService.uploadProject(formData).subscribe({
+  this.ProjectService.uploadProject(formData).subscribe({
     next: () => this.handleUploadResponse(),
     error: (error) => this.handleUploadError(error)
   });
