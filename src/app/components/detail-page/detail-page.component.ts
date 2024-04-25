@@ -14,7 +14,7 @@ export class DetailPageComponent implements OnInit {
 
   property!: Property;
   propertyId!: string;
-  isLargestBid: Boolean = false;
+  isLargestBid: boolean = false;
 
 
   amount = new FormControl('');

@@ -1,11 +1,11 @@
-<body>
+<div *ngIf="project">
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <h1>Your Project Title</h1>
-          <p>Description of your project goes here. Explain what you're creating, why it's unique, and why people should support it.</p>
+          <h1>{{project.projectTitle}}</h1>
+          <p>{{project.projectDescription}}</p>
           <!-- Include images, videos, or other media related to your project -->
-          <app-carousel [carouselItems]="imagesAndVideos"></app-carousel>  
+          <app-carousel [carouselItems]="imagesAndVideos" [project]="project"></app-carousel>  
         </div>
   
         <div class="col-md-4 mt-5 py-5">
@@ -62,4 +62,4 @@
     </div>
     <app-pledge-modal #pledgeModal (pledgeAmountChanged)="submitPledge($event)"></app-pledge-modal>
 
-</body>
+  </div>

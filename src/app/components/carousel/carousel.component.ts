@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Project } from 'src/app/models/Project';
 
 @Component({
   selector: 'app-carousel',
@@ -7,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class CarouselComponent implements OnInit {
   @Input() carouselItems: string[] = [];
+  @Input() project: Project | undefined;
 
 
   ngOnInit(): void {

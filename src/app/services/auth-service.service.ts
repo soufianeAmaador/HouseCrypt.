@@ -215,4 +215,9 @@ export class AuthService implements OnInit {
         withCredentials: true,
       });
   }
+
+  public getBaseUrl(): string {
+    return this.baseUrl;
+
+  }
 }
