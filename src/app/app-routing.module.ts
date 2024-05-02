@@ -27,7 +27,9 @@ const routes: Routes = [
   },
   {
     path: "project",
-    component: ProjectDetailComponent
+    component: ProjectDetailComponent,
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'always',
   },
   {
     path: "create",

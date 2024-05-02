@@ -1,6 +1,7 @@
 import { FileReference } from "./FileReference";
 
 export interface Project {
+    projectId: string
     projectTitle: string;
     projectDescription: string;
     projectGoal: number;

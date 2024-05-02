@@ -5,7 +5,7 @@
           <h1>{{project.projectTitle}}</h1>
           <p>{{project.projectDescription}}</p>
           <!-- Include images, videos, or other media related to your project -->
-          <app-carousel [carouselItems]="imagesAndVideos" [project]="project"></app-carousel>  
+          <app-carousel [project]="project" [autoChange] = "autoChange"></app-carousel>  
         </div>
   
         <div class="col-md-4 mt-5 py-5">
