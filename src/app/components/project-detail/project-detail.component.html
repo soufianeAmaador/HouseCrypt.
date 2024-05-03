@@ -1,30 +1,30 @@
 <div *ngIf="project">
     <div class="container">
       <div class="row">
-        <div class="col-md-8">
-          <h1>{{project.projectTitle}}</h1>
-          <p>{{project.projectDescription}}</p>
+        <h1 class="py-2">{{project.projectTitle}}</h1>
+        <div class="col-md-8 py-4">
           <!-- Include images, videos, or other media related to your project -->
           <app-carousel [project]="project" [autoChange] = "autoChange"></app-carousel>  
+          <p class="py-4">{{project.projectDescription}}</p>
         </div>
   
-        <div class="col-md-4 mt-5 py-5">
-          <div class="card">
-            <div class="card-body">
+        <div class="col-md-4 py-4 ">
+          <div class="card border-0 shadow">
+            <div class="card-body  ">
               <!-- Include a call-to-action to support the project -->
               <h5 class="card-title">Support This Project</h5>
               <div class="mb-3">
-                <h3 class="card-text">0.0eth (110$)</h3>
-                <p>pledged of the total <b>1.0eth</b> goal</p>
+                <h3 class="card-text">0.0eth (${{project.totalPledged}})</h3>
+                <p>pledged of the total <b>${{project.projectGoal}}</b> goal</p>
               </div>
 
               <span></span>
               <div class="mb-3">
-                <h1>29</h1>
+                <h1>{{daysToGo}}</h1>
                 <p>days to go</p>
               </div>
               <div class="progress bg-blueviolet">
-                <div id="progressBar" class="progress-bar" role="progressbar" style="width: 10%; background-color: #CBC3E3;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                <div id="progressBar" class="progress-bar" role="progressbar" [style.width.%]="(project.totalPledged / project.projectGoal * 100 )" [style.backgroundColor]="'#CBC3E3'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
               <span></span>
               <p class="card-text">Help make this project a reality by supporting it today!</p>

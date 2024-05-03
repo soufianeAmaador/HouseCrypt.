@@ -16,6 +16,7 @@ export class ProjectDetailComponent implements OnInit{
     imagesAndVideos: string[] = [];
     project: Project | undefined = undefined;
     projectId!: string | null;
+    daysToGo: number = 0;
 
     constructor(private projectService: ProjectService,
       private errorHandlerService: ErrorHandlerService,
@@ -25,7 +26,6 @@ export class ProjectDetailComponent implements OnInit{
 
     ngOnInit(): void {
       this.projectId = this.route.snapshot.queryParamMap.get('id');
-      console.log(this.projectId);
       if(this.projectId == null || this.projectId === ""){
         this.router.navigate(['/']);
         this.errorHandlerService.handleError("Project not found!");
@@ -38,8 +38,8 @@ export class ProjectDetailComponent implements OnInit{
     this.projectService.getAllProjects().subscribe({
       next: (projects: Project[]) =>{
         this.project = projects.find(project => project.projectId === this.projectId);
-        console.log("this");
-        console.log(this.project);
+        this.daysToGo = Math.ceil((new Date(this.project!.projectDeadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+
         this.loadMedia();
       },
       error: (error) =>{

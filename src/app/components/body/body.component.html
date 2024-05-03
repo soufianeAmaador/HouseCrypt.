@@ -6,10 +6,10 @@
         <h5 class="card-title">{{ project.projectTitle }}</h5>
         <!-- Use CSS line-clamp for text truncation -->
         <p class="card-text line-clamp-4">{{ project.projectDescription }}</p>
-        <a [routerLink]="['/project']" [queryParams]="{id: project.projectId}" class="btn btn-primary">Current bid</a>
+        <a [routerLink]="['/project']" [queryParams]="{id: project.projectId}" class="btn btn-primary">totalPledged {{project.totalPledged}}</a>
       </div>
       <div class="progress" style="width: 18rem; height: 0.3rem;">
-        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 10%; background-color: #CBC3E3;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        <div id="progressBar" class="progress-bar" role="progressbar" [style.width.%]="(project.totalPledged / project.projectGoal * 100 )" [style.backgroundColor]="'#CBC3E3'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
     </div>
   </div>

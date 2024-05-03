@@ -10,5 +10,6 @@ export interface Project {
     totalDonators: number;
     projectPhotos: FileReference[]; 
     projectVideos: FileReference[]; 
+    progress: number;
     user: string; // User ID
   }

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { ProjectService } from 'src/app/services/project.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-project',
@@ -21,7 +22,8 @@ export class UploadProjectComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef, 
     private ProjectService: ProjectService,
-    private errorHandlerService: ErrorHandlerService){
+    private errorHandlerService: ErrorHandlerService,
+    private router: Router){
     this.projectForm = this.formBuilder.group({
       projectTitle: ['', Validators.required],
       projectDescription: ['', Validators.required],
@@ -80,7 +82,10 @@ onSubmit(): void {
   if(this.projectForm.valid){
       // Example: Sending projectFormData to the service for uploading
   this.ProjectService.uploadProject(formData).subscribe({
-    next: () => this.handleUploadResponse(),
+    next: () => {this.handleUploadResponse();
+      //temporarily until i fix the ethereum smart contract handling
+      this.router.navigate(['/']);
+    },
     error: (error) => this.handleUploadError(error)
   });
   }else{

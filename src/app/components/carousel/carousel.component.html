@@ -5,7 +5,7 @@
           <!-- Loop through the carouselItems array and create carousel items -->
           <div *ngFor="let item of carouselItems; let i = index" class="carousel-item" [class.active]="i === 0">
             <ng-container *ngIf="item.endsWith('.jpg') || item.endsWith('.jpeg') || item.endsWith('.png')">
-              <img [src]="item" class="d-block w-100" alt="Image {{i + 1}}">
+              <img [src]="item" style="max-height: 500px; max-width: 500px;" alt="Image {{i + 1}}" class="d-block w-100 mx-auto">
             </ng-container>
             <ng-container *ngIf="item.endsWith('.mp4') || item.endsWith('.webm')">
               <video [src]="item" class="d-block w-100" controls>
@@ -17,11 +17,11 @@
   
         <div *ngIf="!autoChange">
                     <!-- Carousel Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="'#carousel_' + project.projectId" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#carousel_' + project?.projectId" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Previous</span>
           </button>
-          <button class="carousel-control-next" type="button" data-bs-target="'#carousel_' + project.projectId" data-bs-slide="next">
+          <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#carousel_' + project?.projectId" data-bs-slide="next">
             <span class="sr-only" style="font-weight: bolder; color: blueviolet;">Next</span>
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
           </button>
