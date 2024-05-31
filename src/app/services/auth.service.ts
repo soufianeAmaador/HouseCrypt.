@@ -8,6 +8,7 @@ import { Observable, Subject, firstValueFrom, Subscription, finalize } from "rxj
 import { User } from "../models/User";
 import { EthereumService } from "./ethereum.service";
 import { ErrorHandlerService } from "./error-handler.service";
+import { UserService } from "./user.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthService implements OnInit {
@@ -31,7 +32,8 @@ export class AuthService implements OnInit {
     private http: HttpClient,
     private router: Router,
     private ethereumService: EthereumService,
-    private errorHandlerService: ErrorHandlerService
+    private errorHandlerService: ErrorHandlerService,
+    private userService: UserService
   ) {
     this.isConnected().then((_isConnected) => {
       if (!_isConnected) this.connectWallet();
@@ -94,6 +96,9 @@ export class AuthService implements OnInit {
             window.alert(error);
             this.errorHandlerService.handleError(error);
           });
+
+          console.log("load user from authservice");
+          await this.userService.loadUser();
 
         this.loginStatus.next(true);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -191,6 +196,7 @@ export class AuthService implements OnInit {
           this.loginStatus.next(false);
           this.walletAddress.next("");
           localStorage.removeItem("currentuser");
+          //this.userService.clearUser();
         })
       )
       .subscribe({

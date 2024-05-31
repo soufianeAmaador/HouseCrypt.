@@ -1,6 +1,8 @@
+import { Donation } from "./Donation";
+import { Project } from "./Project";
+
 export interface User {
   address: string;
-  sessionToken: string;
-  email: string;
-  displayname: string;
+  projects: Project[];
+  donations: Donation[];
 }

@@ -14,7 +14,7 @@ export class PledgeModalComponent {
    }
 
   sendPledge(): void {
-
+    if(this.pledgeAmount !== undefined && this.pledgeAmount > 0)
     this.pledgeAmountChanged.emit(this.pledgeAmount);
   }
 

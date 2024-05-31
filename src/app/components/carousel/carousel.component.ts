@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Project } from 'src/app/models/Project';
-import { AuthService } from 'src/app/services/auth-service.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-carousel',

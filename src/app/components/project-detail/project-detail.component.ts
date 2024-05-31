@@ -3,6 +3,7 @@ import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { Project } from 'src/app/models/Project';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -19,6 +20,7 @@ export class ProjectDetailComponent implements OnInit{
     daysToGo: number = 0;
 
     constructor(private projectService: ProjectService,
+      private userService: UserService,
       private errorHandlerService: ErrorHandlerService,
       private route: ActivatedRoute,
       private router: Router
@@ -30,23 +32,21 @@ export class ProjectDetailComponent implements OnInit{
         this.router.navigate(['/']);
         this.errorHandlerService.handleError("Project not found!");
       }
-      this.getAllProjects();
+      this.loadProject(); 
     }
 
-  getAllProjects() {
-
-    this.projectService.getAllProjects().subscribe({
-      next: (projects: Project[]) =>{
-        this.project = projects.find(project => project.projectId === this.projectId);
+  loadProject(){
+    this.projectService.loadProject(this.projectId!).subscribe({
+      next: (project) => {
+        this.project = project;
         this.daysToGo = Math.ceil((new Date(this.project!.projectDeadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-
         this.loadMedia();
       },
-      error: (error) =>{
+      error: (error) => {
         console.log(error);
         this.errorHandlerService.handleError(error);
-      },
-    })
+      }
+    });
   }
 
   loadMedia(){
@@ -62,7 +62,19 @@ export class ProjectDetailComponent implements OnInit{
 
   submitPledge(pledgeAmount: number): void {
     this.pledgeAmount = pledgeAmount;
-    this.pledgeModal.hide();
+    const user = this.userService.getUser();
+
+    if(user === undefined || this.project === undefined){
+      this.errorHandlerService.handleError("something went wrong! Try again later");
+      return;
+    }
+    
+    this.userService.addDonation({
+      user: user,
+      project: this.project.projectId,
+      amount: this.pledgeAmount,
+      time: new Date()
+    });
   }
 
 }
