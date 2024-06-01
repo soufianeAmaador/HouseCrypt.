@@ -26,10 +26,7 @@ export class BodyComponent implements OnInit {
 
   ngOnInit(): void {
     // this.properties = Array.from(this.propertyService.getAllProperties().values()); 
-    this.getAllProjects();
-    console.log("called loadUser");
-    this.userService.loadUser();
-    
+    this.getAllProjects();    
   }
 
   getAllProjects() {
@@ -48,7 +45,16 @@ export class BodyComponent implements OnInit {
 
   doStuff(){
     console.log("do stuff");
-    this.userService.loadUser();
+    this.userService.getError().subscribe({
+      next: () => {},
+      error: (error) => {
+        console.log(error);
+        console.log(error.error);
+        console.log(error.error.error);
+        console.log(error.error.error.message);
+        this.errorHandlerService.handleError(error);
+      }
+    })
   }
 
 }

@@ -87,18 +87,17 @@ export class AuthService implements OnInit {
           method: "eth_requestAccounts",
         });
 
+        // replace this with userservice's current User
         this.walletAddress.next(accounts[0]);
         localStorage.setItem("currentuser", accounts[0]);
 
         await this.signInWithEthereum()
-          .then(() => this.sendForVerification())
+          .then(() => 
+            this.sendForVerification())
           .catch((error) => {
             window.alert(error);
             this.errorHandlerService.handleError(error);
           });
-
-          console.log("load user from authservice");
-          await this.userService.loadUser();
 
         this.loginStatus.next(true);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -169,8 +168,10 @@ export class AuthService implements OnInit {
           withCredentials: true,
         }
       )
-      .subscribe((res) => {
+      .subscribe(async (res) => {
         console.log(res);
+        // load user after verified
+        await this.userService.loadUser();
       });
   }
 
@@ -193,15 +194,22 @@ export class AuthService implements OnInit {
       .pipe(
         finalize(() => {
           // This code will run regardless of whether the request succeeds or fails
+          console.log("finalize");
           this.loginStatus.next(false);
           this.walletAddress.next("");
           localStorage.removeItem("currentuser");
+          this.userService.clearUser();
           //this.userService.clearUser();
         })
       )
       .subscribe({
-        next: () => {},
+        next: () => {
+          console.log("next reached!");
+        },
         error: (error) => {
+          console.log("error at auth.service");
+          console.error('Error status:', error.status);
+          console.error('Error details:', error.message);
           this.errorHandlerService.handleError(error);
         }
       });

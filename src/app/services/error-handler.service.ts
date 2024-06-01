@@ -2,6 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { CustomError } from '../models/Error';
 
 @Injectable({
   providedIn: 'root'
@@ -24,13 +25,15 @@ export class ErrorHandlerService {
   }
 
   private handleHttpError(error: HttpErrorResponse): void {
+    
     let errorMessage = 'An error occurred.';
     if (error.error instanceof ErrorEvent){
       // Client-side error
       errorMessage = `Error: ${error.error.message}`;
     } else {
+
       // Server-side error
-      errorMessage = `Status: ${error.status}, Message: ${error.message}`;
+      errorMessage = `Status: ${error.status}, Message: ${error.error.error.message}`;
     }
     this.showToast('HTTP Error', errorMessage);
   }

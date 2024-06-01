@@ -8,6 +8,7 @@ import { Donation } from '../models/Donation';
   providedIn: 'root'
 })
 export class UserService {
+
   private user: User | undefined;
   private userAddress: string | undefined;
   private readonly baseUrl = "http://localhost:5050";
@@ -27,6 +28,7 @@ export class UserService {
       withCredentials: true,
     }).subscribe({
       next: (user) => { 
+        console.log("this is the load user response");
         this.user = user;
         this.userAddress = user.address;
       },
@@ -48,6 +50,14 @@ export class UserService {
       error: (error) => {
         this.errorHandlerService.handleError(error);
       }
+    });
+  }
+
+  getError() {
+    return this.http
+    .get(`${this.baseUrl}/error1`, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
     });
   }
 

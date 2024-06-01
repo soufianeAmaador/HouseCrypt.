@@ -18,6 +18,7 @@ export const isUserLoggedInGuard = async (
   const errorHandler = inject(ErrorHandlerService)
 
   try {
+    console.log("uth guar reached!");
     await firstValueFrom(auth.checkLogin());
     return true;
   } catch (error: any) {
