@@ -22,9 +22,11 @@ export class CarouselComponent implements OnInit {
   loadMedia(){
     const BASE_URL = this.authService.getBaseUrl();
     if(this.project !== undefined){
-            // Concatenate paths from both photo and video arrays
-      this.carouselItems = this.carouselItems.concat(this.project.projectPhotos.map(photo =>   BASE_URL +photo.path));
-      this.carouselItems = this.carouselItems.concat(this.project.projectVideos.map(video =>   BASE_URL +video.path));
+      if(this.project.projectPhotos !== undefined)
+        // Concatenate paths from both photo and video arrays
+        this.carouselItems = this.carouselItems.concat(this.project.projectPhotos!.map(photo =>   BASE_URL +photo.path));
+      if(this.project.projectVideos !== undefined)
+        this.carouselItems = this.carouselItems.concat(this.project.projectVideos.map(video =>   BASE_URL +video.path));
     }
 
   }

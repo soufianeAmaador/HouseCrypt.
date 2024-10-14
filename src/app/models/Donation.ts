@@ -1,8 +1,7 @@
-import { User } from "./User";
-
 export interface Donation{
-    user: User;
+    id?: string; //TODO make sure id is loaded
+    user: string;
     project: string;
-    amount: number;
+    amount: string; // Amount in wei
     time: Date;
 }

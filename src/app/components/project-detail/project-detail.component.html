@@ -1,20 +1,20 @@
 <div *ngIf="project">
     <div class="container">
       <div class="row">
-        <h1 class="py-2">{{project.projectTitle}}</h1>
-        <div class="col-md-8 py-4">
+        <div class="col-md-8 mt-4" >
           <!-- Include images, videos, or other media related to your project -->
           <app-carousel [project]="project" [autoChange] = "autoChange"></app-carousel>  
-          <p class="py-4">{{project.projectDescription}}</p>
+          <h1 class="pt-2 display-6">{{project.projectTitle}}</h1>
+          <p class="py-1 text-muted">{{project.projectDescription}}</p>
         </div>
   
-        <div class="col-md-4 py-4 ">
-          <div class="card border-0 shadow">
+        <div class="col-md-4 mt-4">
+          <div class="card" style="background-color: #f5eef800; border-style: none;">
             <div class="card-body  ">
               <!-- Include a call-to-action to support the project -->
               <h5 class="card-title">Support This Project</h5>
               <div class="mb-3">
-                <h3 class="card-text">0.0eth (${{project.totalPledged}})</h3>
+                <h3 class="card-text">{{this.totalPledgedEther}}eth (${{this.totalPledgedDollar}})</h3>
                 <p>pledged of the total <b>${{project.projectGoal}}</b> goal</p>
               </div>
 
@@ -23,15 +23,15 @@
                 <h1>{{daysToGo}}</h1>
                 <p>days to go</p>
               </div>
-              <div class="progress bg-blueviolet">
-                <div id="progressBar" class="progress-bar" role="progressbar" [style.width.%]="(project.totalPledged / project.projectGoal * 100 )" [style.backgroundColor]="'#CBC3E3'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress bg-blueviolet" style="border-radius: 0;">
+                <div id="progressBar" class="progress-bar" style="border-radius: 0;" role="progressbar" [style.width.%]="calculateProgress()" [style.backgroundColor]="'#CBC3E3'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
               <span></span>
               <p class="card-text">Help make this project a reality by supporting it today!</p>
-              <a class="btn btn-primary" style="background-color: blueviolet;" data-bs-toggle="modal" data-bs-target="#pledgeModal">
+              <a class="btn btn-custom d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#pledgeModal">
                 Back This Project
               </a>
-              
+                         
             </div>
           </div>
         </div>
@@ -39,26 +39,40 @@
       </div>
       
       <div class="row">
-        <div class="col-md-8">
-            <h2>Project Updates</h2>
-            <!-- Include updates about your project's progress -->
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Update 1: We Reached 50% Funding!</h5>
-                <p class="card-text">Details about the project update go here.</p>
-              </div>
+        <hr class="my-12">
+        <div class="col-md-7 position-relative">
+          <h2>Project Updates</h2>
+          <!-- Include updates about your project's progress -->
+          <div class="card" style="background-color: #f5eef800; border-style: none;">
+            <div class="card-body">
+              <h5 class="card-title">Update 1: We Reached 50% Funding!</h5>
+              <p class="card-text">Details about the project update go here.</p>
             </div>
+          </div>
         </div>
-        <div class="col-md-4 border rounded">
+      
+        <!-- Vertical divider -->
+        <div class="col-md-1 d-flex justify-content-center align-items-stretch px-0 mx-0" >
+          <div class=""></div>
+        </div>
+      
+        <div class="col-md-4 position-relative" >
+          <div class="p-0 mb-4" >
+            <app-donation-list [donations]="donations"></app-donation-list>
+          </div>
+        
+          <div>
             <h2>Rewards</h2>
-                      <!-- List your reward tiers with details -->
-          <ul>
-            <li>Backer Level 1: $10 - Description of reward 1</li>
-            <li>Backer Level 2: $25 - Description of reward 2</li>
-            <!-- Add more reward tiers as needed -->
-          </ul>
+            <!-- List your reward tiers with details -->
+            <ul>
+              <li>Backer Level 1: $10 - Description of reward 1</li>
+              <li>Backer Level 2: $25 - Description of reward 2</li>
+              <!-- Add more reward tiers as needed -->
+            </ul>
+          </div>
         </div>
       </div>
+      
     </div>
     <app-pledge-modal #pledgeModal (pledgeAmountChanged)="submitPledge($event)"></app-pledge-modal>
 

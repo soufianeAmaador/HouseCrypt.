@@ -1,14 +1,84 @@
-.bg-overlay {
-    background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.0)), url("https://t4.ftcdn.net/jpg/03/68/11/53/360_F_368115331_2J9ax3Lmub0UXkQwfvHUIMCCSLFn5UFy.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    color: #fff;
-    height: 200px;
-    padding-top: 50px;
+/* Sidebar menu style */
+#sidebarMenu {
+    width: 250px;
+    height: 100vh;
+    background-color: rgb(248, 249, 250);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    overflow-x: hidden;
+    transition: all 0.3s;
+  }
+  
+  /* Profile picture icon */
+  .bi-pencil-fill {
+    cursor: pointer;
+    color: #333;
+    font-size: 1.2rem;
+  }
+  
+  /* Styling for input fields */
+  .form-control {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  /* Projects & Biddings carousel section */
+  .carousel {
+    margin-top: 20px;
+  }
+  
+  .btn {
+    background-color: #f5eef8;
+    transition: background-color 0.3s ease; /* Smooth transition for color */
+    border-radius: 0%;
+    text-align: left;
+    color: black;
+  }
+  
+  .btn:hover {
+    background-color: rgb(233, 217, 239);
+  }
+
+  .profile-picture {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 10px 1px rgba(203, 195, 227, 1), /* Minimal vertical glow */
+                0 0 100px 20px rgba(203, 195, 227, 0.8); /* Maximal horizontal glow */
+  }
+  
+.edit-icon {
+  cursor: pointer;
+  color: #6c757d;
 }
-.Profile-picture {
-    margin-top: 2%;
-    height: 200px;
-    width: 200px;
+
+.edit-icon:hover {
+  color: #000;
+}
+
+.card {
+  border-radius: 10px;
+  background-color: rgba(233, 217, 239, 0.25);
+  border-style: none;
+}
+
+.form-control[disabled] {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.scrollable-container {
+  display: flex;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  padding: 1rem; /* Add some padding */
+  gap: 1rem; /* Add some spacing between thumbnails */
+}
+
+.thumbnail {
+  min-width: 16rem; /* Set the width of the project/bidding thumbnails */
+  flex-shrink: 0; /* Prevent shrinking of items */
 }

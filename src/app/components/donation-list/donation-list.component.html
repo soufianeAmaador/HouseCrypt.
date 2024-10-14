@@ -1,0 +1,29 @@
+<div class="container p-0">
+  <div class="row">
+      <h2 class="mb-0">Recent Donations</h2>
+  </div>
+  <hr style="border-style: solid;">
+  <div class="row">
+    <!-- Loop through sorted donations -->
+    <div *ngFor="let donation of sortedDonations">
+      <div class="card" style="border-style: none; background-color: #f5eef800;">
+        <div class="card-body p-0">
+          <h6 class="card-text text-muted mb-0"><b>{{ donation.user }}</b></h6>
+          
+          <!-- Display converted currency values if available -->
+          <p class="card-text mb-0" *ngIf="currencyValuesMap.get(donation.id!)?.length">
+            Has donated 
+            <b>{{ currencyValuesMap.get(donation.id!)?.[0]?.pledgedDollar | currency:'USD':'symbol':'1.2-2' }}</b> USD 
+            (<b>{{ currencyValuesMap.get(donation.id!)?.[0]?.pledgedEther }}</b> ETH)
+          </p>
+          
+          <!-- Show original amount in Wei -->
+          <p class="card-text mb-0"><small class="text-muted">Original Amount (Wei): {{ currencyValuesMap.get(donation.id!)?.[0]?.pledgedWei }}</small></p>
+          
+          <!-- Display donation time -->
+          <p class="card-text mb-0"><small class="text-muted">{{ donation.time | date:'medium' }}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,16 +2,19 @@ import { Donation } from "./Donation";
 import { FileReference } from "./FileReference";
 
 export interface Project {
-    projectId: string
+    projectId?: string,
+    projectSCID?: number,
     projectTitle: string;
     projectDescription: string;
-    projectGoal: number;
-    totalPledged: number;
-    projectDeadline: Date; // You might want to use Date type if you parse it properly
-    totalDonators: number;
-    donations: Donation;
-    projectPhotos: FileReference[]; 
-    projectVideos: FileReference[]; 
-    progress: number;
-    user: string; // User ID
+    projectGoal: string;
+    projectDeadline: Date;
+    donations?: Donation[];
+    projectPhotos?: FileReference[]; 
+    projectVideos?: FileReference[]; 
+    user?: string; // Wallet Address
+  }
+
+  export interface ProjectWithProgress {
+    project: Project;         // The original project object
+    progress: number;         // Progress as a percentage (0-100)
   }

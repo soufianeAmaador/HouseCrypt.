@@ -1,0 +1,26 @@
+.container {
+    background-color: #f5eef800;
+    padding: 20px;
+    border-radius: 3px;
+  }
+  
+  .card {
+    border: none;
+    transition: transform 0.2s;
+  }
+  
+  .card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .card-subtitle {
+    font-size: 1em;
+    color: #6c757d;
+  }
+  
+  .card-text {
+    font-size: 0.9em;
+  }
+  
+  

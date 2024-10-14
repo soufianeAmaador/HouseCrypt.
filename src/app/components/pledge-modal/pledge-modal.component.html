@@ -1,54 +1,61 @@
-<div class="modal"  role="dialog" id="pledgeModal" >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Enter Pledge Amount</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+<div class="modal" role="dialog" id="pledgeModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Enter Pledge Amount</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
         <div class="modal-body">
-          <div class="modal-body">
-            <p>
-              By pledging this amount of money, you are committing to support the project under the following terms:
-            </p>
-            <ol>
-              <li>
-                <strong>Locking Funds in a Smart Contract:</strong>
-                Your pledged amount will be locked in a smart contract until the project's funding goal has been reached.
-              </li>
-              <li>
-                <strong>Project Continuation or Cancellation:</strong>
-                If the funding goal is not reached within the specified timeframe, the project owner has the option to either:
-                <ul>
-                  <li>Extend the project duration and continue seeking funding.</li>
-                  <li>Cancel the project, in which case your pledged amount will be refunded in full.</li>
-                </ul>
-              </li>
-              <li>
-                <strong>Extension or Cancellation by Project Owner:</strong>
-                Should the project owner request more time to reach the goal, pledgers will have the opportunity to vote on whether to extend the project duration.
-              </li>
-              <li>
-                <strong>Voting on End Product Preview:</strong>
-                Once the project is completed, users will have the chance to preview the end product.
-                <ul>
-                  <li>If users are satisfied with the end result, the transaction will proceed, and the content will be released as intended.</li>
-                  <li>If users are not satisfied, they can choose to decline and receive a refund of their pledged amount or vote for a delay to address any concerns.</li>
-                </ul>
-              </li>
-            </ol>
-            <p>
-              Please be aware of these terms before making your pledge. Your support is greatly appreciated in bringing this project to life!
-            </p>
-          </div>
-          <div class="mb-2">
-            <label for="pledgeAmount" class="form-label">Amount:</label>
-            <input type="number" class="form-control" id="pledgeAmount" [(ngModel)]="pledgeAmount">
-          </div>
+          <p>
+            By pledging this amount of money, you are committing to support the project under the following terms:
+          </p>
+          <ol>
+            <li>
+              <strong>Locking Funds in a Smart Contract:</strong>
+              Your pledged amount will be locked in a smart contract until the project's funding goal has been reached.
+            </li>
+            <li>
+              <strong>Project Continuation or Cancellation:</strong>
+              If the funding goal is not reached within the specified timeframe, the project owner has the option to either:
+              <ul>
+                <li>Extend the project duration and continue seeking funding.</li>
+                <li>Cancel the project, in which case your pledged amount will be refunded in full.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Extension or Cancellation by Project Owner:</strong>
+              Should the project owner request more time to reach the goal, pledgers will have the opportunity to vote on whether to extend the project duration.
+            </li>
+            <li>
+              <strong>Voting on End Product Preview:</strong>
+              Once the project is completed, users will have the chance to preview the end product.
+              <ul>
+                <li>If users are satisfied with the end result, the transaction will proceed, and the content will be released as intended.</li>
+                <li>If users are not satisfied, they can choose to decline and receive a refund of their pledged amount or vote for a delay to address any concerns.</li>
+              </ul>
+            </li>
+          </ol>
+          <p>
+            Please be aware of these terms before making your pledge. Your support is greatly appreciated in bringing this project to life!
+          </p>
         </div>
-        <div class="modal-footer m-0 p-0">
-          <button type="button" class="btn btn-primary" style="background-color: blueviolet;" (click)="sendPledge()">Send</button>
+        <div class="mb-2">
+          <label for="pledgeAmountFiat" class="form-label">Amount (USD):</label>
+          <input type="number" class="form-control" id="pledgeAmountFiat" [(ngModel)]="pledgeAmountFiat" (input)="convertAmount()">
         </div>
+        <div class="mb-2">
+          <label for="ethAmount" class="form-label">Equivalent in Ether:</label>
+          <div id="ethAmount">{{ etherAmount }}</div>
+        </div>
+        <div class="mb-2">
+          <label for="weiAmount" class="form-label">Equivalent in Wei:</label>
+          <div id="weiAmount">{{ weiAmount }}</div>
+        </div>
+      </div>
+      <div class="modal-footer m-0 p-0">
+        <button type="button" class="btn btn-primary" style="background-color: blueviolet;" (click)="sendPledge()">Send</button>
       </div>
     </div>
   </div>
-  
+</div>

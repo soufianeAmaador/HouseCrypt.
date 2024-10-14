@@ -1,17 +1,22 @@
-<button (click)="doStuff()">dev button</button>
-<div class="container p-5">
-  <div class="row row-cols-1 g-5">
-    <div class="card col mx-2 p-0" style="width: 18rem;" *ngFor="let project of projects">
-      <app-carousel  [project]="project" [autoChange]="autoChange"></app-carousel>
-      <div class="card-body">
-        <h5 class="card-title">{{ project.projectTitle }}</h5>
-        <!-- Use CSS line-clamp for text truncation -->
-        <p class="card-text line-clamp-4">{{ project.projectDescription }}</p>
-        <a [routerLink]="['/project']" [queryParams]="{id: project.projectId}" class="btn btn-primary">totalPledged {{project.totalPledged}}</a>
-      </div>
-      <div class="progress" style="width: 18rem; height: 0.3rem;">
-        <div id="progressBar" class="progress-bar" role="progressbar" [style.width.%]="(project.totalPledged / project.projectGoal * 100 )" [style.backgroundColor]="'#CBC3E3'" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-      </div>
+<div class="btn btn-primary" (click)="doStuff()">beep boop</div>
+
+<div *ngIf="projects && projects.length > 0; else loading">
+  <div class="container p-5">
+    <div class="row row-cols-1 g-5">
+      <!-- Use the reusable thumbnail component -->
+      <app-project-thumbnail
+        class="w-25"
+        *ngFor="let project of projects"
+        [project]="project"
+        [autoChange]="autoChange"
+        >
+      </app-project-thumbnail>
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <div class="text-center">
+    <p>Loading projects, please wait...</p>
+  </div>
+</ng-template>

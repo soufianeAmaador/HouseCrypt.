@@ -1,0 +1,27 @@
+.line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .clickable {
+    cursor: pointer;
+  }
+  
+  .clickable:hover {
+    text-decoration: none;
+  }
+  
+  .card-body.bg-transparent {
+    border: none;
+  }
+  
+  .card-body.clickable {
+    cursor: pointer;
+  }
+  
+  .card-body.clickable:hover {
+    text-decoration: none;
+  }
+  

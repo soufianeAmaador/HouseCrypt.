@@ -1,31 +1,118 @@
-<div class="">
-  <div class="bg-overlay">
-    <img class="rounded-circle shadow-lg img-thumbnail mx-auto d-block Profile-picture" alt="50x50" src="https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
-    data-holder-rendered="true">
-  </div>
+<div *ngIf="loadscreen">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar Menu (Left Side) -->
+      <div class="col-3 px-0">
+        <div class="collapse show">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <button class="nav-link active btn w-100">Profile</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link btn w-100">My Projects</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link btn w-100">My Biddings</button>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" (click)="onTabClicked(1)" [ngClass]="{'active': index === 1}">Profile</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"  (click)="onTabClicked(2)" [ngClass]="{'active': index === 2}">Your ads</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link"  (click)="onTabClicked(3)" [ngClass]="{'active': index === 3}">Biddings</a>
-        </li>
-    </ul>
+      <!-- Profile Section -->
+      <div class="col-9" style="padding-left: 0%;">
+        <div class="d-flex justify-content-center mt-3">
+          <div class="text-center">
+            <div class="position-relative">
+              <!-- Profile Image -->
+              <img [src]="profilepicture"
+                   class="rounded-circle profile-picture"
+                   alt="Profile Image"
+                   style="height: 140px; width: 150px;">
 
+              <!-- Pencil Icon for Uploading Image -->
+              <i class="bi bi-pencil-fill position-absolute top-100 start-50 translate-middle p-1 bg-light rounded-circle"
+                 (click)="onEditPictureClick()"></i>
+
+              <!-- Hidden Input for Image Upload -->
+              <input type="file" id="profileImageUpload" accept="image/*" style="display: none" (change)="onImageSelected($event)">
+            </div>
+            <h5 class="mt-3">{{ user.address }}</h5>
+          </div>
+        </div>
+
+        <!-- User Profile Form -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4>User Profile</h4>
+            <form [formGroup]="profileForm">
+              <!-- Name Field -->
+              <div class="mb-3 d-flex align-items-center">
+                <label for="name" class="form-label me-2">Name:</label>
+                <input type="text" class="form-control me-2" id="name" formControlName="name" placeholder="Enter your name">
+                <i class="bi bi-pencil-fill edit-icon" id="edit-name" (click)="toggleEdit('name')"></i>
+              </div>
+              <hr>
+
+              <!-- Email Field -->
+              <div class="mb-3 d-flex align-items-center">
+                <label for="email" class="form-label me-2">Email:</label>
+                <input type="email" class="form-control me-2" id="email" formControlName="email" placeholder="Enter your email">
+                <i class="bi bi-pencil-fill edit-icon" id="edit-email" (click)="toggleEdit('email')"></i>
+              </div>
+              <hr>
+
+              <!-- Bio Field -->
+              <div class="mb-3 d-flex align-items-center">
+                <label for="bio" class="form-label me-2">Bio:</label>
+                <textarea class="form-control me-2 ms-3" id="bio" rows="1" formControlName="bio" placeholder="Tell something about yourself"></textarea>
+                <i class="bi bi-pencil-fill edit-icon" id="edit-bio" (click)="toggleEdit('bio')"></i>
+              </div>
+            </form>
+
+            <!-- Save Changes Button -->
+            <button *ngIf="formChanged" class="btn btn-primary" (click)="saveChanges()">Save Changes</button>
+          </div>
+        </div>
+
+        <!-- Projects Carousel Card -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4>My Projects</h4>
+            <div *ngIf="projects && projects.length > 0;">
+              <div class="scrollable-container">
+                <app-project-thumbnail
+                  class="thumbnail"
+                  *ngFor="let project of projects"
+                  [project]="project"
+                  [autoChange]="autoChange">
+                </app-project-thumbnail>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Biddings Carousel Card -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h4>My Biddings</h4>
+            <div *ngIf="biddings && biddings.length > 0;">
+              <div class="scrollable-container">
+                <app-project-thumbnail
+                  class="thumbnail"
+                  *ngFor="let bidding of biddings"
+                  [project]="bidding"
+                  [autoChange]="autoChange">
+                </app-project-thumbnail>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- Closing col-9 div -->
+    </div> <!-- Closing row div -->
+  </div> <!-- Closing container-fluid div -->
 </div>
 
-<div class="container tabbar-contents">
-  <div class="profile-detail" *ngIf = "index == 1">
-    <app-profile-detail></app-profile-detail>
-  </div>
-  <div class="your-ads" *ngIf = "index == 2">
-    <h1> Your ads should be displayed here!</h1>
-  </div>
-  <div class="biddings" *ngIf = "index == 3">
-    <h1> your biddings should be here!</h1>
-  </div>
+<div *ngIf="!loadscreen">
+  <p>Loading user data...</p>
 </div>

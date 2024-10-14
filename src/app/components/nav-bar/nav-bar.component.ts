@@ -54,10 +54,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
   toggleLogIn(walletAddress: string) {
     this.isLoggedIn = true;
     this.connectedUser =
-      walletAddress.substring(0, 5) +
+      walletAddress.substring(0, 7) +
       "..." +
-      walletAddress.substring(38) +
-      " (Disconnect)";
+      walletAddress.substring(37);
   }
 
   toggleLogOut() {
