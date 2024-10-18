@@ -1,13 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { ethers } from "ethers";
-
 import { SiweMessage } from "siwe";
 import { Observable, Subject, firstValueFrom, Subscription, finalize } from "rxjs";
 import { User } from "../models/User";
 import { EthereumService } from "./ethereum.service";
 import { ErrorHandlerService } from "./error-handler.service";
+import { UserService } from "./user.service";
 
 @Injectable({ providedIn: "root" })
 export class AuthService implements OnInit {
@@ -15,10 +14,9 @@ export class AuthService implements OnInit {
   private loginStatus = new Subject<boolean>();
   public walletAddress = new Subject<string>();
   private ethereumSubscription!: Subscription;
+  private domain = window.location.host;
+  private origin = window.location.origin;
 
-  domain = window.location.host;
-  origin = window.location.origin;
-  provider = new ethers.providers.Web3Provider(window.ethereum);
 
   private readonly baseUrl = "http://localhost:5050";
   private readonly nonceUrl = `${this.baseUrl}/nonce`;
@@ -31,7 +29,8 @@ export class AuthService implements OnInit {
     private http: HttpClient,
     private router: Router,
     private ethereumService: EthereumService,
-    private errorHandlerService: ErrorHandlerService
+    private errorHandlerService: ErrorHandlerService,
+    private userService: UserService
   ) {
     this.isConnected().then((_isConnected) => {
       if (!_isConnected) this.connectWallet();
@@ -78,35 +77,25 @@ export class AuthService implements OnInit {
   //web3login to be implemented here
   public async connectWallet() {
     console.log("connectwallet");
-    if (typeof window != "undefined" && window.ethereum != "undefined") {
-      try {
-        // if MetaMask is installed
-        const accounts: string[] = await window.ethereum.request({
-          method: "eth_requestAccounts",
+    try {
+      const accounts = await this.ethereumService.connectWallet();
+      this.walletAddress.next(accounts[0]);
+      localStorage.setItem("currentuser", accounts[0]);
+
+      await this.signInWithEthereum()
+        .then(() => this.sendForVerification())
+        .catch((error) => {
+          window.alert(error);
+          this.errorHandlerService.handleError(error);
         });
 
-        this.walletAddress.next(accounts[0]);
-        localStorage.setItem("currentuser", accounts[0]);
-
-        await this.signInWithEthereum()
-          .then(() => this.sendForVerification())
-          .catch((error) => {
-            window.alert(error);
-            this.errorHandlerService.handleError(error);
-          });
-
-        this.loginStatus.next(true);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        if (error.code === 4001) {
-          // MetaMask is not installed
-          this.errorHandlerService.handleError("Metamask is not installed!");
-        } else {
-          this.errorHandlerService.handleError(error);
-        }
-        await this.logOut();
+      this.loginStatus.next(true);
+    } catch (error: any) {
+      if (error.code === 4001) {
+        this.errorHandlerService.handleError("Metamask is not installed!");
+      } else {
+        this.errorHandlerService.handleError(error);
       }
-    } else {
       await this.logOut();
     }
   }
@@ -140,15 +129,18 @@ export class AuthService implements OnInit {
   signature: string | null = null;
 
   public async signInWithEthereum() {
-    try{
-      const signer = this.provider.getSigner();
-
-      this.message = await this.createSiweMessage(
-        await signer.getAddress(),
-        "Sign in with Ethereum to Housecrypt."
-      );
-      this.signature = await signer.signMessage(this.message);
-    }catch(error) {
+    try {
+      const signer = await this.ethereumService.getSigner();
+      if (signer) {
+        this.message = await this.createSiweMessage(
+          await signer.getAddress(),
+          "Sign in with Ethereum to Housecrypt."
+        );
+        this.signature = await signer.signMessage(this.message);
+      } else {
+        throw new Error('Signer is undefined');
+      }
+    } catch (error) {
       this.errorHandlerService.handleError("Metamask signature interrupted, try again!");
       this.logOut();
     }
@@ -164,19 +156,15 @@ export class AuthService implements OnInit {
           withCredentials: true,
         }
       )
-      .subscribe((res) => {
+      .subscribe(async (res) => {
         console.log(res);
+        // load user after verified
+        await this.userService.loadUser();
       });
   }
 
   public async isConnected(): Promise<boolean> {
-    let _isConnected: boolean = false;
-    await window.ethereum
-      .request({ method: "eth_accounts" })
-      .then((accounts: string[]) => {
-        _isConnected = accounts.length !== 0;
-      });
-    return _isConnected;
+    return this.ethereumService.isConnected();
   }
 
   public async logOut() {
@@ -188,31 +176,47 @@ export class AuthService implements OnInit {
       .pipe(
         finalize(() => {
           // This code will run regardless of whether the request succeeds or fails
+          console.log("finalize");
           this.loginStatus.next(false);
           this.walletAddress.next("");
           localStorage.removeItem("currentuser");
+          this.userService.clearUser();
+          //this.userService.clearUser();
         })
       )
       .subscribe({
-        next: () => {},
+        next: () => {
+          console.log("next reached!");
+        },
         error: (error) => {
+          console.log("error at auth.service");
+          console.error('Error status:', error.status);
+          console.error('Error details:', error.message);
           this.errorHandlerService.handleError(error);
         }
       });
   }
 
-  public async refreshAccessToken() {
-    // User must be logged in and ethereum address must be present in oreder to refresh token
-    const address = await this.provider.getSigner().getAddress()
-    if(address.length <= 0){
+  public async refreshAccessToken(): Promise<Observable<JSON>> {
+    const signer = await this.ethereumService.getSigner();
+    const address = signer ? await signer.getAddress() : '';
+    if (!address) {
       console.error("Sign in with your ethereum account first!");
       this.router.navigate(["/login"]);
+      return new Observable<JSON>((observer) => {
+        observer.error(new Error("No Ethereum address available"));
+      });
     }
-
+  
     return this.http
-      .post<JSON>(this.refreshAccessTokenUrl, JSON.stringify({ address: address}),{
+      .post<JSON>(this.refreshAccessTokenUrl, JSON.stringify({ address: address }), {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
+  }
+  
+
+  public getBaseUrl(): string {
+    return this.baseUrl;
   }
 }

@@ -1,7 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
-import { UploadProjectService } from 'src/app/services/upload-project.service';
+import { ProjectService } from 'src/app/services/project.service';
 import { ErrorHandlerService } from 'src/app/services/error-handler.service';
+import { Router } from '@angular/router';
+import { EthereumService } from 'src/app/services/ethereum.service';
+import { Project } from 'src/app/models/Project';
+import { FileReference } from 'src/app/models/FileReference';
+
 
 @Component({
   selector: 'app-upload-project',
@@ -10,18 +15,27 @@ import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 })
 export class UploadProjectComponent implements OnInit {
   projectForm: FormGroup;
+  project: Project | undefined;
+
   selectedImage: string | null = null;
   selectedVideo: string | null = null;
+
   uploadedPhotos: File[] = [];
   uploadedVideos: File[] = [];
+
+  pledgeAmount!: number;
+  etherAmount: string = '';
+  weiAmount: string = '';
   
 
 
   image: string = './assets/artist-7250695_1280.jpg' 
   constructor(private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef, 
-    private uploadProjectService: UploadProjectService,
-    private errorHandlerService: ErrorHandlerService){
+    private projectService: ProjectService,
+    private ethereumService: EthereumService,
+    private errorHandlerService: ErrorHandlerService,
+    private router: Router){
     this.projectForm = this.formBuilder.group({
       projectTitle: ['', Validators.required],
       projectDescription: ['', Validators.required],
@@ -61,6 +75,23 @@ prepareFormData(): FormData {
   return formData;
 }
 
+
+createProjectObject(formData: FormData){
+  if(formData.get('projectTitle') != null &&  formData.get('projectGoal') != null &&
+    formData.get('projectDeadline') != null){
+      this.project = {
+        projectTitle: formData.get('projectTitle')?.valueOf() as string,
+        projectDescription: formData.get('projectDescription')?.valueOf() as string,
+        projectGoal: formData.get('projectGoal')?.valueOf() as string,
+        projectDeadline: formData.get('projectDeadline')?.valueOf() as Date,
+        projectPhotos: formData.get('projectPhotos')?.valueOf() as FileReference[],
+        projectVideos: formData.get('projectVideos')?.valueOf() as FileReference[],
+
+      }
+    }else return null;
+    return this.project;
+}
+
 // Function to handle response from backend
 handleUploadResponse(): void {
   console.log('Upload successful:');
@@ -77,12 +108,28 @@ handleUploadError(error: any): void {
 // Main function for submitting the form
 onSubmit(): void {
   const formData = this.prepareFormData();
-  if(this.projectForm.valid){
-      // Example: Sending projectFormData to the service for uploading
-  this.uploadProjectService.uploadProject(formData).subscribe({
-    next: () => this.handleUploadResponse(),
-    error: (error) => this.handleUploadError(error)
-  });
+  this.createProjectObject(formData);
+
+
+  if(this.projectForm.valid && this.project !== undefined && this.project !== null){
+    this.ethereumService.createProject({
+      projectTitle: this.project.projectTitle,
+      projectDescription: this.project.projectDescription,
+      projectGoal: this.weiAmount,
+      projectDeadline: this.project.projectDeadline
+    }).then((projectSC) => {
+      console.log("project version: " + projectSC);
+      console.log("test " + parseInt(projectSC, 16));
+      this.project!.projectSCID = parseInt(projectSC, 16);
+      this.projectService.uploadProject(formData).subscribe({
+        next: () => {this.handleUploadResponse();
+          //temporarily until i fix the ethereum smart contract handling
+          this.router.navigate(['/']);
+        },
+        error: (error) => this.handleUploadError(error)
+      });
+    });
+
   }else{
     this.errorHandlerService.handleError("Form is incorrect, please fill the form correctly");
   }
@@ -110,6 +157,13 @@ futureDateValidator() {
     }
     return null;
   };
+}
+ 
+async convertAmount() {
+  if(this.projectForm.get('projectGoal')!.dirty && this.projectForm.get('projectGoal')?.valid && this.projectForm.get('projectGoal')!.value > 0){
+    this.etherAmount = await this.ethereumService.convertToEther(this.projectForm.get('projectGoal')!.value);
+    this.weiAmount = this.ethereumService.convertToWei(this.projectForm.get('projectGoal')!.value).toString();
+  }
 }
 
 }

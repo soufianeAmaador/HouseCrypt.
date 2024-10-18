@@ -1,43 +1,42 @@
-<nav
-  class="navbar navbar-expand-lg navbar-light px-md-4 sticky-top"
-  style="background-color: #cbc3e3"
->
-  <a class="navbar-brand" href="#">HouseCrypt.</a>
-  <button
-    (click)="toggleNavBar()"
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarNav"
-    aria-controls="navbarNav"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="{{ isCollapsed }}" class="navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ms-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Offerings</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Faucet</a>
-      </li>
-      <li class="nav-item active">
-        <a class="button nav-link border rounded" [routerLink]="['/create']">Start a project</a>
-      </li>
-      <li class="nav-item" class="{{ addPadding }}">
-        <a *ngIf="!isLoggedIn" class="nav-link" [routerLink]="['/login']"
-          >Connect</a
-        >
-        <a
-          *ngIf="isLoggedIn"
-          (click)="toggleLogOut()"
-          class="nav-link"
-          [routerLink]="['/']"
-          >{{ this.connectedUser }}</a
-        >
-      </li>
-    </ul>
+<!-- Thin Banner Warning -->
+<div class=" text-center m-0 p-0" role="alert" style="font-size: 0.9rem; background-color: #f33333; color: #f8f8f8; border-style: none">
+  ⚠️ HouseCrypt. is a proof of concept decentralized application using the SepoliaETH testnet, not real Ethereum. Do not use real Ethereum.⚠️
+</div>  
+<nav class="navbar navbar-expand-lg my-0 py-0" style="background-color: #cbc3e3;">
+  <div class="container-fluid" style="padding-right: 0%;">
+    <!-- Left Side: Logo -->
+    <a class="navbar-brand" href="#">
+      HouseCrypt.
+    </a>
+
+    <!-- Center: Buttons -->
+    <div class="mx-auto">
+      <button class="btn p-2" routerLink="/">Projects</button>
+      <button class="btn p-2" routerLink="/create">Create a Project</button>
+    </div>
+
+    <!-- Right Side: Connect or User Info with Dropdown -->
+    <div class="d-flex align-items-center ms-auto">
+      <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
+        <button class="btn p-0" routerLink="/login">Connect</button>
+      </ng-container>
+    
+      <ng-template #loggedInTemplate>
+        <div class="dropdown">
+          <button class="btn dropdown-toggle p-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="assets/digital-wallet.png" style="height: 20px; width: 20px">
+            {{ this.connectedUser }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" routerLink="/profile">Profile</a></li>
+            <li><a class="dropdown-item" (click)="toggleLogOut()">Disconnect</a></li>
+          </ul>
+        </div>
+      </ng-template>
+      
+  
+    </div>
   </div>
 </nav>
+
+

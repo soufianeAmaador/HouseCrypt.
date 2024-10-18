@@ -31,5 +31,10 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "node_modules/solc/**/*.d.ts" // Adjust the path as needed
+]
+
 }

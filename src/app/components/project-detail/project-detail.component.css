@@ -1,0 +1,24 @@
+.vertical-divider {
+    background-color: var(--bs-border-color);; /* Change to desired color */
+    width: 1px;
+    height: 100%;
+  }
+  
+  .position-relative {
+    position: relative;
+  }
+  
+  .btn-custom {
+    background-color: #cbc3e3;
+    border-radius: 3px;
+  }
+  
+  .btn-custom:hover {
+    background-color: blueviolet;
+  }
+  
+  /* .carousel {
+    border-bottom-style: solid;
+    border-bottom-width: 5px;
+    border-bottom-color:#CBC3E3;
+} */

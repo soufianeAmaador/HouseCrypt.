@@ -12,11 +12,9 @@ import { PropertyService } from "./services/property-service.service";
 import { HttpClientModule } from "@angular/common/http";
 import { DetailPageComponent } from "./components/detail-page/detail-page.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { UploadPropertyComponent } from "./components/upload-property/upload-property.component";
 import { LoadingSpinnerComponent } from "./components/loading-spinner/loading-spinner.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
-import { ProfileDetailComponent } from "./components/profile-detail/profile-detail.component";
 import { LogInComponent } from "./components/log-in/log-in.component";
 import { EthereumService } from "./services/ethereum.service";
 import { ErrorHandlerService } from "./services/error-handler.service";
@@ -25,6 +23,8 @@ import { CarouselComponent } from './components/carousel/carousel.component';
 import { PledgeModalComponent } from './components/pledge-modal/pledge-modal.component';
 import { UploadProjectComponent } from './components/upload-project/upload-project.component';
 import { UploadFilesComponent } from './components/upload-files/upload-files.component';
+import { DonationListComponent } from './components/donation-list/donation-list.component';
+import { ProjectThumbnailComponent } from './components/project-thumbnail/project-thumbnail.component';
 
 @NgModule({
   declarations: [
@@ -33,16 +33,16 @@ import { UploadFilesComponent } from './components/upload-files/upload-files.com
     BodyComponent,
     LogInComponent,
     DetailPageComponent,
-    UploadPropertyComponent,
     LoadingSpinnerComponent,
     ProfileComponent,
     PageNotFoundComponent,
-    ProfileDetailComponent,
     ProjectDetailComponent,
     CarouselComponent,
     PledgeModalComponent,
     UploadProjectComponent,
     UploadFilesComponent,
+    DonationListComponent,
+    ProjectThumbnailComponent,
   ],
   imports: [
     BrowserModule,

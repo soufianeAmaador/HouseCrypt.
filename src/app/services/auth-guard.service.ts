@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { inject } from "@angular/core";
-import { catchError, firstValueFrom, switchMap } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import {
   ActivatedRouteSnapshot,
   Router,
   RouterStateSnapshot,
 } from "@angular/router";
-import { AuthService } from "./auth-service.service";
+import { AuthService } from "./auth.service";
 import { ErrorHandlerService } from "./error-handler.service";
 
 export const isUserLoggedInGuard = async (
@@ -15,9 +14,10 @@ export const isUserLoggedInGuard = async (
 ) => {
   const auth = inject(AuthService);
   const router = inject(Router);
-  const errorHandler = inject(ErrorHandlerService)
+  const errorHandler = inject(ErrorHandlerService);
 
   try {
+    console.log("Auth guard reached!");
     await firstValueFrom(auth.checkLogin());
     return true;
   } catch (error: any) {
@@ -26,7 +26,6 @@ export const isUserLoggedInGuard = async (
       return new Promise<boolean>(async (resolve, reject) => {
         (await auth.refreshAccessToken()).subscribe({
           next: () => {
-            console.log("here toch");
             router.navigate([state.url]);
             resolve(true); // Resolve the promise with true
           },
@@ -51,5 +50,4 @@ export const isUserLoggedInGuard = async (
       return false;
     }
   }
-  
 };

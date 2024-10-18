@@ -28,9 +28,17 @@
                 </div>
                 <!-- Project Goal -->
                 <div class="mb-3">
-                    <label for="projectGoal" class="form-label">Project Funding Goal (ETH)</label>
-                    <input type="number" class="form-control" id="projectGoal" placeholder="Enter funding goal" formControlName="projectGoal"
+                    <label for="projectGoal" class="form-label">Project Funding Goal (USD)</label>
+                    <input type="number" class="form-control" id="projectGoal" placeholder="Enter funding goal" formControlName="projectGoal" (input)="convertAmount()"
                       [ngClass]="{ 'is-invalid': projectForm.get('projectGoal')!.invalid && projectForm!.get('projectGoal')!.touched }">
+                      <div *ngIf="projectForm.get('projectGoal')!.touched">
+                        <div class="mx-0 px-0">
+                            <label>Equivalent in Ether: {{ etherAmount }}</label>
+                          </div>
+                          <div class="mb-2">
+                            <label>Equivalent in Wei: {{ weiAmount }}</label>
+                          </div>
+                      </div>
                     <div class="invalid-feedback" *ngIf="projectForm.get('projectGoal')!.errors?.['invalidAmount'] && projectForm.get('projectGoal')!.touched">
                       Amount must be zero or higher
                     </div>

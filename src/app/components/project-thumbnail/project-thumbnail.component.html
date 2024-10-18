@@ -1,0 +1,30 @@
+<div *ngIf="project">
+    <div class="card mx-3 p-0 bg-transparent border-0" style="width: 16rem;">
+      <!-- Carousel -->
+      <app-carousel [project]="project" [autoChange]="autoChange"></app-carousel>
+      
+      <!-- Progress Bar -->
+      <div class="progress" style="width: 16rem; height: 0.3rem; border-radius: 0;">
+        <div
+          id="progressBar"
+          class="progress-bar"
+          role="progressbar"
+          [style.width.%]="progress || 0"
+          [style.backgroundColor]="'#b3a5dd'"
+          aria-valuenow="progress || 0"
+          aria-valuemin="0"
+          aria-valuemax="100">
+        </div>
+      </div>
+  
+      <!-- Project Information -->
+      <div class="card-body bg-transparent border-0 clickable px-0"
+           [routerLink]="['/project']"
+           [queryParams]="{id: project.projectId}">
+        <h5 class="card-title">{{ project.projectTitle }}</h5>
+        <p class="card-text line-clamp-4">{{ project.projectDescription }}</p>
+      </div>
+    </div>
+  </div>
+  
+  

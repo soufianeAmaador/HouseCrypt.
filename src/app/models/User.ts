@@ -1,6 +1,13 @@
+import { Donation } from "./Donation";
+import { FileReference } from "./FileReference";
+import { Project } from "./Project";
+
 export interface User {
   address: string;
-  sessionToken: string;
+  name: string;
   email: string;
-  displayname: string;
+  bio:string;
+  profilePicture?:  FileReference; 
+  projects: Project[];
+  donations: Donation[];
 }
