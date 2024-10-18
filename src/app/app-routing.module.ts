@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: "login", component: LogInComponent },
 
   {
-    path: "profile",
+    path: "profile/:walletAddress",
     component: ProfileComponent,
     resolve: { user: userResolver },
     canActivate: [isUserLoggedInGuard],

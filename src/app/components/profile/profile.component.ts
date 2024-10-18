@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit  } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/User';
 import { FileReference } from 'src/app/models/FileReference';
 import { Project } from 'src/app/models/Project';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   walletAddress: string = "0x";
   autoChange: boolean = true;
   loadscreen: boolean = false;
@@ -18,9 +19,10 @@ export class ProfileComponent {
   originalProfile!: User;
   formChanged = false;
   profilepicture: string = '';
+  owner: boolean = false;
 
-  projects: Project[] = [];
-  biddings: Project[] = [];
+  projects: Project[] = projects;
+  biddings: Project[] = biddings;
 
   user: User = {
     address: '',
@@ -31,33 +33,82 @@ export class ProfileComponent {
     donations: []
   };
 
-  constructor(private userService: UserService, private fb: FormBuilder) {
-    const user = this.userService.getUser();
 
-    if (user === undefined) {
-      this.loadscreen = false;
-    } else {
+  constructor(
+    private route: ActivatedRoute,
+    private userService: UserService, 
+    private fb: FormBuilder) {}
+
+    ngOnInit(): void {
+      this.route.paramMap.subscribe(params => {
+        this.walletAddress = params.get('walletAddress') || '';
+
+        console.log("userwalet is: " + this.walletAddress);
+    
+        if (this.walletAddress) {
+          this.handleUserLoading();
+        }
+      });
+    }
+    
+    // Handles determining if the current user is viewing their own profile or another user's profile
+    private handleUserLoading() {
+      if (this.walletAddress === this.userService.getUserAddress()) {
+        this.owner=true;
+        this.loadCurrentUser();
+      } else {
+        this.loadUserByWallet(this.walletAddress);
+      }
+    }
+    
+    // Loads the currently logged-in user's profile
+    private loadCurrentUser() {
+      console.log("loading current user");
+      this.user = this.userService.getUser()!;
+      if (!this.user) {
+        this.loadscreen = false;
+      } else {
+        this.initializeProfile(this.user);
+      }
+    }
+    
+    // Fetches and loads another user's profile based on their wallet address
+    private loadUserByWallet(walletAddress: string) {
+      console.log("loaduser by wallet address");
+      this.userService.getUserByWallet(walletAddress).subscribe({
+        next: (user: User) => {
+          this.initializeProfile(user);
+        },
+        error: (err) => {
+          console.error("Error fetching user:", err);
+        }
+      });
+    }
+    
+    // Initializes the profile data after successfully fetching a user
+    private initializeProfile(user: User) {
       this.user = user;
       this.loadscreen = true;
-
       this.setProfilePicture();
-      // Set the original profile data
       this.originalProfile = { ...user };
 
-      // Initialize the reactive form
+      console.log("here ");
+      console.log(this.user)
+    
+      // Initialize the reactive form with user data
       this.profileForm = this.fb.group({
         name: [{ value: this.originalProfile.name, disabled: true }],
         email: [{ value: this.originalProfile.email, disabled: true }],
         bio: [{ value: this.originalProfile.bio, disabled: true }],
         profilePicture: [this.originalProfile.profilePicture]
       });
-
-      // Listen for form changes
+    
+      // Listen for form changes to detect modifications
       this.profileForm.valueChanges.subscribe(() => {
         this.formChanged = this.isChanged();
       });
     }
-  }
+    
 
   setProfilePicture(){
     const BASE_URL = this.userService.getBaseUrl()

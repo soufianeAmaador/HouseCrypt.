@@ -82,3 +82,11 @@
   min-width: 16rem; /* Set the width of the project/bidding thumbnails */
   flex-shrink: 0; /* Prevent shrinking of items */
 }
+
+.profile-picture {
+  transition: transform 0.3s ease;
+}
+
+.profile-picture:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}

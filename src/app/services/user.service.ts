@@ -17,6 +17,8 @@ export class UserService {
   private readonly donationUrl = `${this.baseUrl}/submit-donation`;
   private readonly updateUserInfoUrl = `${this.baseUrl}/update-user`;
 
+  private readonly loadProfileUrl = `${this.baseUrl}/get-profile`;
+
   constructor(
     private http: HttpClient,
     private errorHandlerService: ErrorHandlerService,
@@ -52,6 +54,28 @@ export class UserService {
       })
     );
   }
+
+  public getUserByWallet(walletAddress: string): Observable<User> {
+    const url = `${this.loadProfileUrl}/${walletAddress}`;  // Append the wallet address to the base user URL
+    
+    return this.http.get<User>(url, {
+      headers: { "Content-Type": "application/json" },
+    }).pipe(
+      map((user: any) => ({
+        ...user,
+        donations: user.donations.map((donation: any) => ({
+          ...donation,
+          amount: BigInt(donation.amount), // Convert amount to BigInt
+        })),
+      })),
+      catchError((error) => {
+        // Handle the error, log or notify the user
+        this.errorHandlerService.handleError(error);
+        throw error; // Rethrow to handle in the caller (e.g., the component)
+      })
+    );
+  }
+  
 
   public updateUserInfo(user: FormData){
     console.log(user);
@@ -109,7 +133,7 @@ export class UserService {
   public clearUser(){
     this.userAddress = "";
   }
-  
+
   getBaseUrl(): string {
     return this.baseUrl;
   }
