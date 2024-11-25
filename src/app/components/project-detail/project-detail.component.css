@@ -10,15 +10,19 @@
   
   .btn-custom {
     background-color: #cbc3e3;
-    border-radius: 3px;
+    border-radius: 0px;
   }
   
   .btn-custom:hover {
     background-color: blueviolet;
   }
   
-  /* .carousel {
-    border-bottom-style: solid;
-    border-bottom-width: 5px;
-    border-bottom-color:#CBC3E3;
-} */
+  .btn:hover {
+    background-color: rgb(233, 217, 239);
+  }
+
+  .card {
+    border-radius: 10px;
+    background-color: rgba(233, 217, 239, 0.25);
+    border-style: none;
+  }

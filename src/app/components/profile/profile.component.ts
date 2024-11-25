@@ -2,9 +2,13 @@ import { Component, OnInit  } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/User';
-import { FileReference } from 'src/app/models/FileReference';
-import { Project } from 'src/app/models/Project';
+
 import { ActivatedRoute } from '@angular/router';
+import { Project } from 'src/app/models/Project';
+import { FileReference } from 'src/app/models/FileReference';
+import { UpdateServiceService } from 'src/app/services/update-service.service';
+import { Update } from 'src/app/models/update';
+import { ErrorHandlerService } from 'src/app/services/error-handler.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +25,7 @@ export class ProfileComponent implements OnInit {
   profilepicture: string = '';
   owner: boolean = false;
 
+  updates: Update[] = [];
   projects: Project[] = projects;
   biddings: Project[] = biddings;
 
@@ -36,17 +41,17 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService, 
+    private userService: UserService,
+    private updateService: UpdateServiceService, 
+    private errorHandlerService: ErrorHandlerService,
     private fb: FormBuilder) {}
 
     ngOnInit(): void {
       this.route.paramMap.subscribe(params => {
-        this.walletAddress = params.get('walletAddress') || '';
-
-        console.log("userwalet is: " + this.walletAddress);
-    
+        this.walletAddress = params.get('walletAddress') || '';    
         if (this.walletAddress) {
           this.handleUserLoading();
+          this.loadUpdates();
         }
       });
     }
@@ -91,9 +96,6 @@ export class ProfileComponent implements OnInit {
       this.loadscreen = true;
       this.setProfilePicture();
       this.originalProfile = { ...user };
-
-      console.log("here ");
-      console.log(this.user)
     
       // Initialize the reactive form with user data
       this.profileForm = this.fb.group({
@@ -106,6 +108,19 @@ export class ProfileComponent implements OnInit {
       // Listen for form changes to detect modifications
       this.profileForm.valueChanges.subscribe(() => {
         this.formChanged = this.isChanged();
+      });
+    }
+
+    loadUpdates() {
+      console.log((this.walletAddress));
+      if(this.walletAddress !== undefined && this.walletAddress.length > 5)
+      this.updateService.getAllUpdatesOfUser(this.walletAddress).subscribe({
+        next: (updates: Update[]) => {
+          this.updates = updates;
+        },
+        error: (error) => {
+          this.errorHandlerService.handleError(error);
+        }
       });
     }
     
@@ -142,8 +157,6 @@ export class ProfileComponent implements OnInit {
       this.originalProfile = this.profileForm.value;
       this.formChanged = false; // Reset the form changed state
       const formData = this.prepareFormData();
-      console.log("thss the formdata");
-      console.log(formData);
       this.userService.updateUserInfo(formData);
     }
   }

@@ -4,8 +4,33 @@
         <div class="col-md-8 mt-4" >
           <!-- Include images, videos, or other media related to your project -->
           <app-carousel [project]="project" [autoChange] = "autoChange"></app-carousel>  
-          <h1 class="pt-2 display-6">{{project.projectTitle}}</h1>
-          <p class="py-1 text-muted">{{project.projectDescription}}</p>
+          <div *ngIf="!owner">
+            <h1 class="pt-2 display-6">{{project.projectTitle}}</h1>
+            <p class="py-1 text-muted">{{project.projectDescription}}</p>
+          </div>
+          <div *ngIf="owner">
+            <div class="mt-4">
+              <form [formGroup]="projectForm">
+                <!-- Title Field -->
+                <div class="mb-3 d-flex align-items-center row">
+                  <label for="projectTitle" class="form-label col-sm col-form-label">Title:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control " id="projectTitle" formControlName="projectTitle" placeholder="Enter project title">
+                  </div>
+                </div>
+      
+                <!-- Description Field -->
+                <div class="mb-3 d-flex align-items-center row">
+                  <label for="projectDescription" class="form-label col-sm col-form-label">Description:</label>
+                  <div class="col-sm-10 me-3">
+                    <textarea class="form-control me-2 ms-3" id="projectDescription" rows="3" formControlName="projectDescription" placeholder="Describe your project"></textarea>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <button *ngIf="formChanged" class="btn btn-custom mx-0 w-75 d-flex" (click)="saveChanges()">Save Changes</button>
+
+          </div>
         </div>
   
         <div class="col-md-4 mt-4">
@@ -42,12 +67,40 @@
         <hr class="my-12">
         <div class="col-md-7 position-relative">
           <h2>Project Updates</h2>
-          <!-- Include updates about your project's progress -->
-          <div class="card" style="background-color: #f5eef800; border-style: none;">
-            <div class="card-body">
-              <h5 class="card-title">Update 1: We Reached 50% Funding!</h5>
-              <p class="card-text">Details about the project update go here.</p>
+          <div class="card my-3">
+            <div class="card-body">        
+              <!-- Input for Title -->
+              <div class="mb-3 position-end " style="border-radius: 10px;">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Title"
+                  [(ngModel)]="newUpdate.title"
+                />
+              </div>
+          
+              <!-- Input for Description -->
+              <div class="mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Description"
+                  [(ngModel)]="newUpdate.description"
+                  
+                />
+              </div>
+              <app-upload-files (filesUploaded)="onFilesUploaded($event)"></app-upload-files>
+              <!-- Button to add update -->
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-custom" style="border-radius: 5px;" (click)="addUpdate()">
+                  Add Update
+                </button>
+              </div>            
             </div>
+          </div>
+
+          <div *ngFor="let update of updates" class="mb-3">
+            <app-update [update]="update"></app-update>
           </div>
         </div>
       
@@ -58,7 +111,15 @@
       
         <div class="col-md-4 position-relative" >
           <div class="p-0 mb-4" >
-            <app-donation-list [donations]="donations"></app-donation-list>
+            <div *ngIf="loadingDonations">
+              <p>Loading donations...</p>
+            </div>
+            <div *ngIf="!loadingDonations && donations && donations.length > 0">
+              <app-donation-list [donations]="donations"></app-donation-list>
+            </div>
+            <div *ngIf="!loadingDonations && (!donations || donations.length === 0)">
+              <p>No donations available.</p>
+            </div>
           </div>
         
           <div>

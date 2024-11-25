@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorHandlerService } from './error-handler.service';
-import { map, catchError, throwError } from 'rxjs';
+import { map, catchError, throwError, firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -46,26 +46,24 @@ export class CurrencyService {
   private async getCurrencyRate(currencyType: CurrencyType) {
     const params = this.createHttpParams(currencyType);
 
-    return this.http.get(this.baseUrl, { params }).pipe(
-      // Extract the first value from the response object (the exchange rate)
-      map(response => Object.values(response)[0] as number),
-
-      // Catch any errors and call the error handler
-      catchError(error => {
-        this.errorHandlerService.handleError("Failed getting exchange rate");
-        return throwError(() => error); // Propagate the error
-      })
-    ).toPromise(); // Convert the observable to a promise for async/await
+    return firstValueFrom(
+      this.http.get(this.baseUrl, { params }).pipe(
+        // Extract the first value from the response object (the exchange rate)
+        map(response => Object.values(response)[0] as number),
+    
+        // Catch any errors and call the error handler
+        catchError(error => {
+          this.errorHandlerService.handleError("Failed getting exchange rate");
+          return throwError(() => error); // Propagate the error
+        })
+      )
+    );
   }
 
   // Methods to get different currency rates
 
   async getEthereumPriceInDollars() {
-    return 
-    await 
-    this.
-    getCurrencyRate(
-      this.USD_ETH);
+    return await this.getCurrencyRate(this.USD_ETH);
   }
 
   async getDollarPriceInEthereum() {

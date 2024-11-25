@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Project } from '../models/Project';
 import { ErrorHandlerService } from './error-handler.service';
 import { Donation } from '../models/Donation';
+import { Update } from '../models/update';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,9 @@ export class ProjectService {
   private readonly getProjectUrl = `${this.baseUrl}/project`;
   private readonly getProjectDonationsUrl = `${this.baseUrl}/get-project-donations`;
   private readonly uploadProjectUrl = `${this.baseUrl}/upload-project`;
+  private readonly updateProjectUrl = `${this.baseUrl}/update-project`;
   private readonly getDonationUrl = `${this.baseUrl}/get-donations`;
+  private readonly uploadUpdateUrl = `${this.baseUrl}/upload-update`;
 
   constructor(private http: HttpClient,
     private errorHandlerService: ErrorHandlerService
@@ -24,6 +27,27 @@ export class ProjectService {
   uploadProject(project: FormData): Observable<any> {
     return this.http.post<FormData>(this.uploadProjectUrl, project,{
       withCredentials: true,
+    });
+  }
+
+  uploadUpdate(update: Update): Observable<any> {
+    return this.http.post<Update>(this.uploadUpdateUrl, update,{
+      withCredentials: true,
+    });
+  }
+
+  updateProject(project: FormData) {
+    console.log(project);
+    this.http
+    .post<FormData>(this.updateProjectUrl, project, {
+      withCredentials: true,
+    }).subscribe({
+      next: (res) => { 
+        console.log("Project upload successful!")
+      },
+      error: (error) => {
+        this.errorHandlerService.handleError(error);
+      }
     });
   }
 

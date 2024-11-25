@@ -25,6 +25,7 @@ import { UploadProjectComponent } from './components/upload-project/upload-proje
 import { UploadFilesComponent } from './components/upload-files/upload-files.component';
 import { DonationListComponent } from './components/donation-list/donation-list.component';
 import { ProjectThumbnailComponent } from './components/project-thumbnail/project-thumbnail.component';
+import { UpdateComponent } from './components/update/update.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ProjectThumbnailComponent } from './components/project-thumbnail/projec
     UploadFilesComponent,
     DonationListComponent,
     ProjectThumbnailComponent,
+    UpdateComponent,
   ],
   imports: [
     BrowserModule,

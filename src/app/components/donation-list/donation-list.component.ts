@@ -9,7 +9,7 @@ import { EthereumService } from 'src/app/services/ethereum.service';
   styleUrls: ['./donation-list.component.css']
 })
 export class DonationListComponent {
-  @Input() donations: Donation[] = [];
+  @Input() donations!: Donation[];
 
   sortedDonations: Donation[] = [];
   currencyValuesMap: Map<string, CurrencyValues[]> = new Map(); // Map for projectId and CurrencyValues
@@ -17,8 +17,9 @@ export class DonationListComponent {
   constructor(private ethereumService: EthereumService) { }
 
   ngOnInit(): void {
-    this.sortedDonations = 
-    this.donations.sort((a, b) => b.time.getTime() - a.time.getTime());
+    console.log("donations loadedddd");
+    console.log(this.donations);
+    this.sortedDonations = this.donations.sort((a, b) => b.time.getTime() - a.time.getTime());
 
     // Iterate over donations and process currency values asynchronously
     this.donations.forEach(async (donation: Donation) => {

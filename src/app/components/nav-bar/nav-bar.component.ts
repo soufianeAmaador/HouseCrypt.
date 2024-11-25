@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
+import { User } from "src/app/models/User";
 import { AuthService } from "src/app/services/auth.service";
+import { ErrorHandlerService } from "src/app/services/error-handler.service";
+import { UserService } from "src/app/services/user.service";
 
 @Component({
   selector: "app-nav-bar",
@@ -9,36 +12,52 @@ import { AuthService } from "src/app/services/auth.service";
 })
 export class NavBarComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
-  private previousWalletAddress: string = ""; // Track the previous walletAddress
   isCollapsed: string = "collapse";
   addPadding: string = "ps-5";
   isLoggedIn: boolean = false;
   connectedUser: string = "";
+  currentUser: string | null =  "";
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+    private errorHandlerService: ErrorHandlerService
+  ) {}
 
   ngOnInit(): void {
-    const currentUser = localStorage.getItem("currentuser");
-    if (
-      currentUser !== undefined &&
-      currentUser !== null &&
-      currentUser.length > 0
-    )
-      this.toggleLogIn(currentUser);
-
-    this.subscription = this.authService.walletAddress.subscribe(
-      (walletAddress: string) => {
-        if (walletAddress !== this.previousWalletAddress) {
-          // Only proceed if walletAddress has changed
-          if (walletAddress.length > 0) {
-            this.toggleLogIn(walletAddress);
-          } else {
-            this.toggleLogOut();
-          }
-          this.previousWalletAddress = walletAddress; // Update previousWalletAddress
+    this.userService.isLoggedIn().subscribe({
+      next: (isUserLoggedIn: boolean) => {
+        if(isUserLoggedIn){
+          this.userService.loadUser().subscribe({
+            next: (user: User) => {
+              // Handle the returned user data
+              this.currentUser = user.address;
+              console.log("User loaded in constructor: ", user);
+      
+              if (
+                this.currentUser !== undefined &&
+                this.currentUser !== null &&
+                this.currentUser.length > 0
+              ){
+                this.toggleLogIn(this.currentUser);
+              } else{
+                this.toggleLogOut();
+              }
+      
+            },
+            error: (error) => {
+              this.errorHandlerService.handleError(error);
+            }
+          });
+        }else{
+          this.toggleLogOut();
         }
+      },
+      error: (error) => {
+        this.errorHandlerService.handleError(error);
       }
-    );
+    })
+
   }
 
   ngOnDestroy(): void {

@@ -3,7 +3,8 @@ import { User } from '../models/User';
 import { HttpClient } from '@angular/common/http';
 import { ErrorHandlerService } from './error-handler.service';
 import { Donation } from '../models/Donation';
-import { Observable, catchError, map, tap } from 'rxjs';
+import { Observable, Subject, catchError, map, of, tap } from 'rxjs';
+import { Update } from '../models/update';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +17,48 @@ export class UserService {
   private readonly userUrl = `${this.baseUrl}/user`;
   private readonly donationUrl = `${this.baseUrl}/submit-donation`;
   private readonly updateUserInfoUrl = `${this.baseUrl}/update-user`;
-
   private readonly loadProfileUrl = `${this.baseUrl}/get-profile`;
+  private readonly authenticateUserUrl = `${this.baseUrl}/authenticate-user`;
+  private readonly checkLoginUrl = `${this.baseUrl}/check-login`;
+  private loginStatus = new Subject<boolean>();
 
   constructor(
     private http: HttpClient,
     private errorHandlerService: ErrorHandlerService,
   ) { 
-    console.log("loading user");
-    this.loadUser();
+
+    this.isLoggedIn().subscribe({
+      next: (isUserLoggedIn: boolean) => {
+        if(isUserLoggedIn){
+          console.log("loading user");
+          this.authenticateUser().subscribe({
+            next: (user) => {
+              if(user !== undefined){
+                this.loadUser().subscribe({
+                  next: (user: User) => {
+                    // Handle the returned user data
+                    this.user = user;
+                    this.userAddress = user.address;
+                    console.log("user found!");
+                  },
+                  error: (err) => {
+                    console.error("Error loading user in constructor: ", err);
+                  }
+                });
+              }
+            },
+            error: (error) => {
+              this.errorHandlerService.handleError(error);
+            }
+          })
+        } 
+      },
+      error: (error) => {
+        this.errorHandlerService.handleError(error);
+      }
+    })
+
+    
   }
 
   //TODO call this when user has just been authenticated?
@@ -44,13 +78,12 @@ export class UserService {
         // Set the user and userAddress properties inside the service
         this.user = user;
         this.userAddress = user.address;
-        console.log("getting user: ");
-        console.log(user);
+        this.loginStatus.next(true);
       }),
       catchError((error) => {
-        // Handle the error, e.g., log or show a notification
+        this.loginStatus.next(false);
         this.errorHandlerService.handleError(error);
-        throw error; // Rethrow the error to handle it in the resolver or the caller
+        throw error; 
       })
     );
   }
@@ -75,7 +108,6 @@ export class UserService {
       })
     );
   }
-  
 
   public updateUserInfo(user: FormData){
     console.log(user);
@@ -84,17 +116,13 @@ export class UserService {
       withCredentials: true,
     }).subscribe({
       next: (res) => { 
-        console.log("repsone");
-        console.log(res);
       },
       error: (error) => {
-        console.log("errorhanflu");
         this.errorHandlerService.handleError(error);
       }
     });
   }
   
-
   public async addDonation(donation: Donation){
     this.http
     .post<JSON>(this.donationUrl, donation, {
@@ -110,12 +138,45 @@ export class UserService {
     });
   }
 
+  authenticateUser(): Observable<JSON | undefined> {
+    return this.http.get<JSON>(this.authenticateUserUrl, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }).pipe(
+      catchError(() => {
+        this.loginStatus.next(false);
+        return of(undefined);
+        })
+    )
+  }
+
+  
+  isLoggedIn() {
+    return this.http
+      .get<boolean>(`${this.checkLoginUrl}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: boolean) => response) // Map response to boolean value
+      );
+  }
+
+
   getError() {
     return this.http
     .get(`${this.baseUrl}/error1`, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });
+  }
+
+  loginSuccessful(): void {
+    this.loginStatus.next(true);
+  }
+
+  getLoginStatus(): Observable<boolean> {
+    return this.loginStatus.asObservable();
   }
 
   public getUser(){
@@ -137,4 +198,5 @@ export class UserService {
   getBaseUrl(): string {
     return this.baseUrl;
   }
+
 }

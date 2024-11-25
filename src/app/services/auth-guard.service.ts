@@ -7,39 +7,28 @@ import {
 } from "@angular/router";
 import { AuthService } from "./auth.service";
 import { ErrorHandlerService } from "./error-handler.service";
+import { UserService } from "./user.service";
 
 export const isUserLoggedInGuard = async (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {
   const auth = inject(AuthService);
+  const userService = inject(UserService)
   const router = inject(Router);
   const errorHandler = inject(ErrorHandlerService);
 
   try {
     console.log("Auth guard reached!");
-    await firstValueFrom(auth.checkLogin());
+    await firstValueFrom(userService.authenticateUser());
     return true;
   } catch (error: any) {
     const parsedJsonError = JSON.parse(JSON.stringify(error.error));
-    if (parsedJsonError.error && parsedJsonError.error.code === "ACCESSTOKEN_INVALID_OR_EXPIRED") {
-      return new Promise<boolean>(async (resolve, reject) => {
-        (await auth.refreshAccessToken()).subscribe({
-          next: () => {
-            router.navigate([state.url]);
-            resolve(true); // Resolve the promise with true
-          },
-          error: (error) => {
-            errorHandler.handleError(JSON.parse(JSON.stringify(error.error)));
-            router.navigate(["/login"]);
-            reject(false); // Reject the promise with false
-          },
-        });
-      });
-    } else if (
+    if (
       parsedJsonError.error &&
       parsedJsonError.error.code === "SESSIONTOKEN_INVALID_OR_EXPIRED"
     ) {
+      auth.setRedirectUrl(state.url);
       // Redirect to the login page
       router.navigate(["/login"]);
       return false;

@@ -11,7 +11,6 @@ import { UserService } from "./user.service";
 @Injectable({ providedIn: "root" })
 export class AuthService implements OnInit {
   private redirectUrl: string | null = null;
-  private loginStatus = new Subject<boolean>();
   public walletAddress = new Subject<string>();
   private ethereumSubscription!: Subscription;
   private domain = window.location.host;
@@ -21,7 +20,6 @@ export class AuthService implements OnInit {
   private readonly baseUrl = "http://localhost:5050";
   private readonly nonceUrl = `${this.baseUrl}/nonce`;
   private readonly verifyUrl = `${this.baseUrl}/verify`;
-  private readonly checkLoginUrl = `${this.baseUrl}/check-login`;
   private readonly refreshAccessTokenUrl = `${this.baseUrl}/refresh-access-token`;
   private readonly logoutUrl = `${this.baseUrl}/log-out`;
 
@@ -59,21 +57,6 @@ export class AuthService implements OnInit {
     this.redirectUrl = null;
   }
 
-  checkLogin(): Observable<JSON> {
-    return this.http.get<JSON>(this.checkLoginUrl, {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-    });
-  }
-
-  loginSuccessful(): void {
-    this.loginStatus.next(true);
-  }
-
-  getLoginStatus(): Observable<boolean> {
-    return this.loginStatus.asObservable();
-  }
-
   //web3login to be implemented here
   public async connectWallet() {
     console.log("connectwallet");
@@ -89,7 +72,6 @@ export class AuthService implements OnInit {
           this.errorHandlerService.handleError(error);
         });
 
-      this.loginStatus.next(true);
     } catch (error: any) {
       if (error.code === 4001) {
         this.errorHandlerService.handleError("Metamask is not installed!");
@@ -177,11 +159,9 @@ export class AuthService implements OnInit {
         finalize(() => {
           // This code will run regardless of whether the request succeeds or fails
           console.log("finalize");
-          this.loginStatus.next(false);
           this.walletAddress.next("");
           localStorage.removeItem("currentuser");
           this.userService.clearUser();
-          //this.userService.clearUser();
         })
       )
       .subscribe({

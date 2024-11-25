@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ethers } from "ethers";
-import Decimal from 'decimal.js';
+import {Decimal} from 'decimal.js';
 import { Subject } from "rxjs";
 import { environment } from '../../environments/environment';
 import { Project } from "../models/Project";
@@ -59,7 +59,7 @@ export class EthereumService {
   }
 
   async convertToEther(pledgeAmountDollar: Decimal): Promise<string> {
-    if (pledgeAmountDollar !== undefined && pledgeAmountDollar.greaterThan(0)) {
+    if (pledgeAmountDollar !== undefined && pledgeAmountDollar.gt(new Decimal(0.0))) {
       // Get the current exchange rate (ETH to USD)
       const exchangeRate = await this.currencyService.getEthereumPriceInDollars();
       console.log("This is the exchange rate: ", exchangeRate);
@@ -83,7 +83,11 @@ export class EthereumService {
   
 
 async convertToWei(pledgeAmountDollar: Decimal){
-  if (pledgeAmountDollar !== undefined && pledgeAmountDollar.greaterThan(0)) {
+  if (!(pledgeAmountDollar instanceof Decimal)) {
+    pledgeAmountDollar = new Decimal(pledgeAmountDollar);
+  }
+
+  if (pledgeAmountDollar !== undefined && pledgeAmountDollar.gt(new Decimal(0.0))) {
     const etherAmount = await this.convertToEther(pledgeAmountDollar);
     const weiAmount = ethers.utils.parseUnits(etherAmount, "ether");
 
@@ -97,13 +101,12 @@ async convertToWei(pledgeAmountDollar: Decimal){
 
 async convertToDollars(weiAmount: bigint): Promise<string> {
   if (weiAmount !== undefined && weiAmount > 0n) {
-    const exchangeRate = await this.currencyService.getEthereumPriceInDollars();    
+
+    const exchangeRate = await this.currencyService.getEthereumPriceInDollars(); 
     // Convert Wei to Ether 
     const etherAmount = ethers.utils.formatUnits(weiAmount.toString(), "ether");
-    console.log("this is the etherAmount amount: ");
     // Convert Ether to USD using the exchange rate
     const dollarValue = parseFloat(etherAmount) * exchangeRate!;
-    console.log(dollarValue.toFixed(2))
     
     return dollarValue.toFixed(2); // Show dollar value up to 2 decimal places
   } else {

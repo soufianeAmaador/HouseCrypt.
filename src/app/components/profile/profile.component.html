@@ -3,7 +3,7 @@
     <div class="row">
       <!-- Sidebar Menu (Left Side) -->
       <div class="col-3 px-0">
-        <div class="collapse show">
+        <div class="collapse show pb-5">
           <ul class="nav flex-column">
             <li class="nav-item">
               <button class="nav-link active btn w-100">Profile</button>
@@ -16,6 +16,14 @@
             </li>
           </ul>
         </div>
+        <div class="mt-4 pt-3">
+          <div class="scrollable-list">
+            <h4>{{ owner ? 'My Updates' : 'Updates' }}</h4>
+            <div *ngFor="let update of updates" class="mb-3">
+              <app-update [update]="update" class="btn w-100"></app-update>
+            </div>
+          </div>
+        </div> 
       </div>
 
       <!-- Profile Section -->
@@ -99,7 +107,7 @@
                 <button *ngIf="formChanged" class="btn btn-primary" (click)="saveChanges()">Save Changes</button>
               </div>
             </div>
-          </div>
+          </div>         
 
         <!-- Projects Carousel Card -->
         <div class="card mb-4">

@@ -90,3 +90,9 @@
 .profile-picture:hover {
   transform: scale(1.05); /* Slight zoom effect on hover */
 }
+
+.scrollable-list {
+  max-height: 1000px;
+  overflow-y: auto;
+}
+
