@@ -6,4 +6,26 @@
   .card-text {
     color: #555;
   }
+
+  .card-media {
+    display: flex;
+    justify-content: flex-start; /* Align media to the left */
+    align-items: center; /* Center media vertically if necessary */
+    margin: 0; /* Remove margins */
+    padding: 0; /* Remove padding */
+  }
+  
+  .card-media img, 
+  .card-media video {
+    max-width: 100%; /* Prevent horizontal overflow */
+    max-height: 300px; /* Limit vertical height */
+    object-fit: contain; /* Maintain aspect ratio without stretching */
+    width: auto; /* Ensure width scales proportionally */
+    height: auto; /* Ensure height scales proportionally */
+    border-radius: 0; /* Optional: Remove rounded corners if any */
+    margin: 0; /* No margin around the media */
+    padding: 0; /* No padding around the media */
+  }
+  
+  
   

@@ -30,8 +30,8 @@ export class ProjectService {
     });
   }
 
-  uploadUpdate(update: Update): Observable<any> {
-    return this.http.post<Update>(this.uploadUpdateUrl, update,{
+  uploadUpdate(update: FormData): Observable<any> {
+    return this.http.post<FormData>(this.uploadUpdateUrl, update,{
       withCredentials: true,
     });
   }
@@ -67,6 +67,10 @@ export class ProjectService {
   getDonations(id: string): Observable<JSON>{
     console.log("getDonations called ")
     return this.http.get<JSON>(`${this.getDonationUrl}/${id}`);
+  }
+
+  getBaseUrl(): string{
+    return this.baseUrl;
   }
   
 }

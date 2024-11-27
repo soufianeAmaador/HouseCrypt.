@@ -41,6 +41,7 @@ export class ProjectDetailComponent implements OnInit {
 
   // FormGroup for handling form inputs
   projectForm!: FormGroup;
+  updateForm!: FormGroup;
   formChanged = false;
 
   constructor(
@@ -255,19 +256,22 @@ export class ProjectDetailComponent implements OnInit {
       this.project.projectId && 
       this.project.user
     ) {
-      const update = {
+      const update: any = {
         ...this.newUpdate,
         dateTime: new Date(),
         project: this.project!.projectId!,
         owner: this.project!.user!,
-        image: this.uploadedPhotos.length > 0 ? this.uploadedPhotos[0] : undefined,
-        videos: this.uploadedVideos.length > 0 ? this.uploadedVideos[0] : undefined,
+        photo: this.uploadedPhotos.length > 0 ? this.uploadedPhotos[0] : undefined,
+        video: this.uploadedVideos.length > 0 ? this.uploadedVideos[0] : undefined,
       };
-      console.log("New update added:", update);
 
-      this.projectService.uploadUpdate(update)
+      const formData = this.prepareFormData(update);
+
+      console.log("New update added:", formData);
+
+      this.projectService.uploadUpdate(formData)
       .subscribe({
-        next: () => {
+        next: (update: Update) => {
           console.log("update Upload succcessvul");
           this.updates.push(update);
         },
@@ -284,7 +288,23 @@ export class ProjectDetailComponent implements OnInit {
       console.log("smthng is false");
     }
   }
-  
+
+  prepareFormData(update: any): FormData {
+    const formData = new FormData();
+    formData.append('title', update.title),
+    formData.append('description', update.description),
+    formData.append('dateTime', update.dateTime.toISOString()),
+    formData.append('project', update.project),
+    formData.append('owner', update.owner );
+
+    if(update.photo !== undefined){
+        formData.append('photo', update.photo);
+    }else if(update.video !== undefined){
+        formData.append('video', update.video);
+    }
+
+    return formData;
+  }
 }
 
 const updates: Update[] = [];
