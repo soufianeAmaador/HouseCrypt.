@@ -38,6 +38,7 @@ export class ProjectDetailComponent implements OnInit {
   updates: Update[] = updates;
   uploadedPhotos: File[] = [];
   uploadedVideos: File[] = [];
+  deadlinePassed: boolean = false;
 
   // FormGroup for handling form inputs
   projectForm!: FormGroup;
@@ -65,7 +66,7 @@ export class ProjectDetailComponent implements OnInit {
     // Initialize the form
     this.projectForm = this.formBuilder.group({
       projectTitle: [''],
-      projectDescription: ['']
+      projectDescription: [''],
     });
 
      // Load both user and project in parallel
@@ -104,6 +105,7 @@ export class ProjectDetailComponent implements OnInit {
         this.loadDonations();
         this.loadUpdates();
         this.loadscreen = true;
+        this.deadlinePassed = new Date().getTime() >= this.project.projectDeadline.getTime(); 
       },
       error: (error) => {
         console.log(error);
@@ -245,9 +247,35 @@ export class ProjectDetailComponent implements OnInit {
     project: '', // Set default values
     owner: '',
   };
+  
+  addUpdate(){
+    this.uploadUpdate(false);
+  }
 
-  addUpdate() { 
+  uploadUpdate(snippet: boolean) { 
     // Check if all required fields are populated
+    const update = this.prepareRawUpdate(snippet);
+
+    if(update){
+      const formData = this.prepareFormData(update);
+    this.projectService.uploadUpdate(formData)
+    .subscribe({
+      next: (update: Update) => {
+        this.updates.push(update);
+      },
+      error: (error) => {
+        console.log(error);
+        this.errorHandlerService.handleError(error)
+      }
+    });
+
+    // Clear the form fields
+    this.newUpdate.title = '';
+    this.newUpdate.description = '';
+    }
+  }
+
+  prepareRawUpdate(snippet: boolean){
     if (
       this.newUpdate.title && 
       this.newUpdate.title.length > 5 && 
@@ -256,38 +284,40 @@ export class ProjectDetailComponent implements OnInit {
       this.project.projectId && 
       this.project.user
     ) {
-      const update: any = {
+      return {
         ...this.newUpdate,
         dateTime: new Date(),
         project: this.project!.projectId!,
         owner: this.project!.user!,
         photo: this.uploadedPhotos.length > 0 ? this.uploadedPhotos[0] : undefined,
         video: this.uploadedVideos.length > 0 ? this.uploadedVideos[0] : undefined,
+        snippet: snippet
       };
+    } else{
+        console.log("update not valid");
+        return null;
+      }
+  }
 
-      const formData = this.prepareFormData(update);
-
-      console.log("New update added:", formData);
-
-      this.projectService.uploadUpdate(formData)
-      .subscribe({
-        next: (update: Update) => {
-          console.log("update Upload succcessvul");
-          this.updates.push(update);
-        },
-        error: (error) => {
-          console.log(error);
-          this.errorHandlerService.handleError(error)
-        }
-      });
-  
-      // Clear the form fields
-      this.newUpdate.title = '';
-      this.newUpdate.description = '';
-    }else{
-      console.log("smthng is false");
+  async addSnippet() {
+    const update = this.prepareRawUpdate(true);
+    if (update) {
+      const isSuccess = await this.ethereumService.submitSnippet(update);
+      if (isSuccess) {
+        console.log('Snippet upload was successful!');
+        // Perform further actions if needed
+        this.uploadUpdate(true);
+        this.projectForm.patchValue({
+          snippet: "true"
+        });
+        this.saveChanges();
+      } else {
+        console.error('Snippet upload failed.');
+        // Handle failure case, e.g., show a notification
+      }
     }
   }
+  
 
   prepareFormData(update: any): FormData {
     const formData = new FormData();
@@ -295,6 +325,7 @@ export class ProjectDetailComponent implements OnInit {
     formData.append('description', update.description),
     formData.append('dateTime', update.dateTime.toISOString()),
     formData.append('project', update.project),
+    formData.append('snippet', 'false'),
     formData.append('owner', update.owner );
 
     if(update.photo !== undefined){

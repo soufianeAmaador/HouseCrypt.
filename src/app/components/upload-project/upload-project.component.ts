@@ -86,6 +86,7 @@ createProjectObject(formData: FormData){
         projectDeadline: formData.get('projectDeadline')?.valueOf() as Date,
         projectPhotos: formData.get('projectPhotos')?.valueOf() as FileReference[],
         projectVideos: formData.get('projectVideos')?.valueOf() as FileReference[],
+        snippet: false
 
       }
     }else return null;
@@ -116,7 +117,8 @@ onSubmit(): void {
       projectTitle: this.project.projectTitle,
       projectDescription: this.project.projectDescription,
       projectGoal: this.weiAmount,
-      projectDeadline: this.project.projectDeadline
+      projectDeadline: this.project.projectDeadline,
+      snippet: false
     }).then((projectSC) => {
       console.log("project version: " + projectSC);
       console.log("test " + parseInt(projectSC, 16));

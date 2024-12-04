@@ -92,8 +92,11 @@
               <app-upload-files (filesUploaded)="onFilesUploaded($event)"></app-upload-files>
               <!-- Button to add update -->
               <div class="d-flex justify-content-end">
-                <button class="btn btn-custom" style="border-radius: 5px;" (click)="addUpdate()">
+                <button class="btn btn-custom mx-1" style="border-radius: 5px;" (click)="addUpdate()">
                   Add Update
+                </button>
+                <button class="btn btn-custom" [disabled]="!deadlinePassed" style="border-radius: 5px;" (click)="addSnippet()">
+                  Add snippet
                 </button>
               </div>            
             </div>

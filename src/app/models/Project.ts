@@ -11,6 +11,7 @@ export interface Project {
     donations?: Donation[];
     projectPhotos?: FileReference[]; 
     projectVideos?: FileReference[]; 
+    snippet: boolean;
     user?: string; // Wallet Address
   }
 

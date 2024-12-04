@@ -5,6 +5,7 @@ import { Subject } from "rxjs";
 import { environment } from '../../environments/environment';
 import { Project } from "../models/Project";
 import { CurrencyService } from "./currency.service";
+import { ErrorHandlerService } from "./error-handler.service";
 
 @Injectable({
   providedIn: "root",
@@ -19,7 +20,7 @@ export class EthereumService {
     return this._accountsChanged.asObservable();
   }
 
-  constructor(private currencyService: CurrencyService) {
+  constructor(private currencyService: CurrencyService, private errorHandlerService: ErrorHandlerService) {
     if (typeof window.ethereum !== 'undefined') {
       this.provider = new ethers.providers.Web3Provider(window.ethereum);
       window.ethereum.on('accountsChanged', (accounts: string[]) => {
@@ -227,6 +228,50 @@ async convertToDollars(weiAmount: bigint): Promise<string> {
           console.error("Error fetching all projects:", error);
       }
   }
+
+  async submitSnippet(update: {
+    title: string;
+    description: string;
+    dateTime: Date;
+    project: string;
+    owner: string;
+  }): Promise<boolean> {
+    try {
+      // Generate the snippet hash
+      const snippetString = JSON.stringify(update);
+      const snippetHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(snippetString));
+      console.log('Generated Snippet Hash:', snippetHash);
+  
+      // Ensure Ethereum service is connected
+      const isConnected = await this.isConnected();
+      if (!isConnected) {
+        this.errorHandlerService.handleError('Ethereum wallet is not connected.');
+        return false; // Indicate failure
+      }
+  
+      if (this.contract !== undefined) {
+        // Call the smart contract function
+        const projectId = parseInt(update.project); // Assuming `update.project` contains the project ID as a string
+        const txResponse = await this.contract['uploadSnippet'](projectId, snippetHash);
+  
+        // Wait for the transaction receipt
+        const txReceipt = await txResponse.wait();
+        console.log('Transaction successful:', txReceipt);
+  
+        // Emit success message or perform further actions
+        alert(`Snippet uploaded successfully for Project ID ${projectId}`);
+        return true; // Indicate success
+      } else {
+        console.error('Contract is not initialized.');
+        return false; // Indicate failure
+      }
+    } catch (error: any) {
+      console.error('Error uploading snippet:', error);
+      this.errorHandlerService.handleError(`Failed to upload snippet: ${error.message}`);
+      return false; // Indicate failure
+    }
+  }  
+
 }
 
 

@@ -8,5 +8,6 @@ export interface Update {
     owner: string;
     photo?: FileReference;
     video?: FileReference;
+    snippet: boolean;
   }
   

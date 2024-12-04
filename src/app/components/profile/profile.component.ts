@@ -246,6 +246,7 @@ export const projects: Project[] = [
     projectGoal: '5000',
     projectDeadline: new Date('2024-12-31'),
     projectPhotos: examplePhotos,
+    snippet: false,
     user: '0xABC123'
   },
   {
@@ -256,6 +257,7 @@ export const projects: Project[] = [
     projectGoal: '10000',
     projectDeadline: new Date('2024-11-15'),
     projectPhotos: examplePhotos,
+    snippet: false,
     user: '0xDEF456'
   },
   {
@@ -266,6 +268,7 @@ export const projects: Project[] = [
     projectGoal: '7500',
     projectDeadline: new Date('2025-01-10'),
     projectPhotos: examplePhotos,
+    snippet: false,
     user: '0xGHI789'
   },
   {
@@ -276,6 +279,7 @@ export const projects: Project[] = [
     projectGoal: '6000',
     projectDeadline: new Date('2024-10-05'),
     projectPhotos: examplePhotos,
+    snippet: false,
     user: '0xJKL101'
   },
   {
@@ -286,6 +290,7 @@ export const projects: Project[] = [
     projectGoal: '4000',
     projectDeadline: new Date('2024-12-01'),
     projectPhotos: examplePhotos,
+    snippet: false,
     user: '0xMNO112'
   }
 ];
@@ -299,6 +304,7 @@ export const biddings: Project[] = [
     projectGoal: '3000',
     projectDeadline: new Date('2024-09-30'),
     projectPhotos: examplePhotos,
+    snippet: false,
     user: '0xBID123'
   },
   {
@@ -309,6 +315,7 @@ export const biddings: Project[] = [
     projectGoal: '12000',
     projectDeadline: new Date('2025-02-20'),
     projectPhotos: examplePhotos,
+    snippet: false,
     user: '0xBID456'
   },
   {
@@ -318,7 +325,7 @@ export const biddings: Project[] = [
     projectDescription: 'Supporting the construction of eco-friendly homes.',
     projectGoal: '20000',
     projectDeadline: new Date('2025-03-15'),
-    projectPhotos: examplePhotos,
+    projectPhotos: examplePhotos,snippet: false,
     user: '0xBID789'
   },
   {
@@ -328,7 +335,7 @@ export const biddings: Project[] = [
     projectDescription: 'A bid to promote STEM education for girls.',
     projectGoal: '8000',
     projectDeadline: new Date('2024-11-01'),
-    projectPhotos: examplePhotos,
+    projectPhotos: examplePhotos,snippet: false,
     user: '0xBID101'
   },
   {
@@ -338,7 +345,7 @@ export const biddings: Project[] = [
     projectDescription: 'A bid to offer scholarships to talented musicians.',
     projectGoal: '15000',
     projectDeadline: new Date('2024-10-20'),
-    projectPhotos: examplePhotos,
+    projectPhotos: examplePhotos,snippet: false,
     user: '0xBID112'
   }
 ];
