@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { Project } from '../models/Project';
 import { ErrorHandlerService } from './error-handler.service';
 import { Donation } from '../models/Donation';
@@ -19,6 +19,7 @@ export class ProjectService {
   private readonly updateProjectUrl = `${this.baseUrl}/update-project`;
   private readonly getDonationUrl = `${this.baseUrl}/get-donations`;
   private readonly uploadUpdateUrl = `${this.baseUrl}/upload-update`;
+  private readonly getProjectSCIDURL = `${this.baseUrl}/get-projectscid`;
 
   constructor(private http: HttpClient,
     private errorHandlerService: ErrorHandlerService
@@ -58,6 +59,10 @@ export class ProjectService {
 
   loadProject(id: string): Observable<Project>{
     return this.http.get<Project>(`${this.getProjectUrl}/${id}`);
+  }
+
+  getProjectSCID(id: string): Promise<number> {
+    return lastValueFrom(this.http.get<number>(`${this.getProjectSCIDURL}/${id}`));
   }
 
   loadProjectDonations(id: string): Observable<Donation[]>{

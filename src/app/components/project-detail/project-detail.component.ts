@@ -232,6 +232,14 @@ export class ProjectDetailComponent implements OnInit {
     this.projectService.updateProject(updatedProject);
   }
 
+  refundProjectDontaion() {
+    
+  }
+
+  delayProject(weeks: number){
+
+  }
+
   isChanged(): boolean {
     const title = this.projectForm.get("projectTitle")?.getRawValue() as string;
     const description = this.projectForm.get("projectDescription")?.getRawValue() as string;

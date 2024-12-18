@@ -11,19 +11,19 @@
 
     <!-- Center: Buttons -->
     <div class="mx-auto">
-      <button class="btn p-2" routerLink="/">Projects</button>
-      <button class="btn p-2" routerLink="/create">Create a Project</button>
+      <button class="btn btn-theme p-2" routerLink="/">Projects</button>
+      <button class="btn btn-theme p-2" routerLink="/create">Create a Project</button>
     </div>
 
     <!-- Right Side: Connect or User Info with Dropdown -->
     <div class="d-flex align-items-center ms-auto">
       <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
-        <button class="btn p-0" routerLink="/login">Connect</button>
+        <button class="btn btn-theme p-0" routerLink="/login">Connect</button>
       </ng-container>
     
       <ng-template #loggedInTemplate>
         <div class="dropdown">
-          <button class="btn dropdown-toggle p-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <button class="btn btn-theme dropdown-toggle p-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             <img src="assets/digital-wallet.png" style="height: 20px; width: 20px">
             {{ this.connectedUser }}
           </button>

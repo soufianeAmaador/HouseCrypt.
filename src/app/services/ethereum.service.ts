@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { Project } from "../models/Project";
 import { CurrencyService } from "./currency.service";
 import { ErrorHandlerService } from "./error-handler.service";
+import { ProjectService } from "./project.service";
 
 @Injectable({
   providedIn: "root",
@@ -20,12 +21,18 @@ export class EthereumService {
     return this._accountsChanged.asObservable();
   }
 
-  constructor(private currencyService: CurrencyService, private errorHandlerService: ErrorHandlerService) {
-    if (typeof window.ethereum !== 'undefined') {
+  constructor(
+    private currencyService: CurrencyService, 
+    private projectService: ProjectService,
+    private errorHandlerService: ErrorHandlerService) {
+
+      if (typeof window.ethereum !== 'undefined') {
       this.provider = new ethers.providers.Web3Provider(window.ethereum);
+
       window.ethereum.on('accountsChanged', (accounts: string[]) => {
         this._accountsChanged.next(accounts);
       });
+
       this.contract = new ethers.Contract(
         environment.contractAddress,
         environment.contractAbi,
@@ -63,6 +70,7 @@ export class EthereumService {
     if (pledgeAmountDollar !== undefined && pledgeAmountDollar.gt(new Decimal(0.0))) {
       // Get the current exchange rate (ETH to USD)
       const exchangeRate = await this.currencyService.getEthereumPriceInDollars();
+
       console.log("This is the exchange rate: ", exchangeRate);
       console.log("This is the dollar amount: ", pledgeAmountDollar.toString());
   
@@ -117,14 +125,17 @@ async convertToDollars(weiAmount: bigint): Promise<string> {
 
 
   async pledge(projectId: string, amount: bigint) {
+
     console.log("Pledging ethers: " + amount);
     console.log(this.contract);
     console.log(projectId);
 
     if (this.contract != undefined) {
       try {
+        // TODO: get projectID from the projectid/ smartcontractid Table! 
         const response = await this.contract["pledge"](1, { value: amount });
         console.log("Transaction response:", response);
+
         return response;
       } catch (error) {
         console.error("Transaction failed:", error);
@@ -251,8 +262,65 @@ async convertToDollars(weiAmount: bigint): Promise<string> {
   
       if (this.contract !== undefined) {
         // Call the smart contract function
-        const projectId = parseInt(update.project); // Assuming `update.project` contains the project ID as a string
-        const txResponse = await this.contract['uploadSnippet'](projectId, snippetHash);
+        
+        const projectSCID = await this.projectService.getProjectSCID(update.project);
+        console.log("this is what we got back");
+        console.log(projectSCID);
+
+        if(projectSCID === undefined || projectSCID <= 0){
+          return false;
+        }
+
+        const txResponse = await this.contract['uploadSnippet'](projectSCID, snippetHash);
+  
+        // Wait for the transaction receipt
+        const txReceipt = await txResponse.wait();
+        console.log('Transaction successful:', txReceipt);
+  
+        // Emit success message or perform further actions
+        alert(`Snippet uploaded successfully for Project ID ${projectSCID}`);
+        return true; // Indicate success
+      } else {
+        console.error('Contract is not initialized.');
+        return false; // Indicate failure
+      }
+    } catch (error: any) {
+      console.error('Error uploading snippet:', error);
+      this.errorHandlerService.handleError(`Failed to upload snippet: ${error.message}`);
+      return false; // Indicate failure
+    }
+  }  
+  // vote(uint256 _projectId, uint256 voteType, uint256 delayWeeks)
+  async vote(projectId: string, votingType: number, weeks: number): Promise<boolean> {
+    try {
+  
+      // Ensure Ethereum service is connected
+      const isConnected = await this.isConnected();
+      if (!isConnected) {
+        this.errorHandlerService.handleError('Ethereum wallet is not connected.');
+        return false; // Indicate failure
+      }
+  
+      if (this.contract !== undefined) {
+        // Call the smart contract function
+        
+        const projectSCID = await this.projectService.getProjectSCID(projectId);
+        console.log("this is what we got back");
+        console.log(projectSCID);
+
+        if(projectId === undefined || projectSCID <= 0){
+          return false;
+        }
+
+        let txResponse; 
+        if(votingType === 1){
+          txResponse = await this.contract['vote'](projectId, votingType, 0);
+
+        }else if(votingType === 2){
+          txResponse = await this.contract['vote'](projectId, votingType, 0);
+        }else if(votingType === 3 && weeks >= 1 && weeks <= 6){
+          txResponse = await this.contract['vote'](projectId, votingType, weeks);
+        }else return false;
   
         // Wait for the transaction receipt
         const txReceipt = await txResponse.wait();
@@ -269,8 +337,8 @@ async convertToDollars(weiAmount: bigint): Promise<string> {
       console.error('Error uploading snippet:', error);
       this.errorHandlerService.handleError(`Failed to upload snippet: ${error.message}`);
       return false; // Indicate failure
-    }
-  }  
+    }  
+  }
 
 }
 

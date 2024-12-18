@@ -121,8 +121,13 @@ onSubmit(): void {
       snippet: false
     }).then((projectSC) => {
       console.log("project version: " + projectSC);
-      console.log("test " + parseInt(projectSC, 16));
-      this.project!.projectSCID = parseInt(projectSC, 16);
+    
+      const projectSCID = parseInt(projectSC, 16);
+      console.log("test " + projectSCID);
+
+      // this.project!.projectSCID = projectSCID;
+      formData.append("projectSCID",projectSCID.toString());
+
       this.projectService.uploadProject(formData).subscribe({
         next: () => {this.handleUploadResponse();
           //temporarily until i fix the ethereum smart contract handling

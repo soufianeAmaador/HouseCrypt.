@@ -28,7 +28,7 @@
                 </div>
               </form>
             </div>
-            <button *ngIf="formChanged" class="btn btn-custom mx-0 w-75 d-flex" (click)="saveChanges()">Save Changes</button>
+            <button *ngIf="formChanged" class="btn btn-theme mx-0 w-75 d-flex" (click)="saveChanges()">Save Changes</button>
 
           </div>
         </div>
@@ -53,10 +53,37 @@
               </div>
               <span></span>
               <p class="card-text">Help make this project a reality by supporting it today!</p>
-              <a class="btn btn-custom d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#pledgeModal">
+              <a class="btn btn-theme d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#pledgeModal">
                 Back This Project
               </a>
                          
+            </div>
+          </div>
+
+          <div  class="card" style="background-color: #f5eef800; border-style: none;">
+            <div class="card-body">
+              <h5 class="card-title text-center">Vote on the Project's Outcome</h5>
+              <p class="card-text text-center">Choose an option for the project's next steps:</p>
+          
+              <!-- Delay Deadline Label -->
+              <div class="text-center">
+                <label for="delay-options" class="form-label">Delay Deadline:</label>
+              </div>
+          
+              <!-- Small Buttons for Weeks -->
+              <div id="delay-options" class="d-flex flex-wrap justify-content-center gap-2">
+                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">1 Week</button>
+                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">2 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">3 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">4 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">5 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">6 Weeks</button>
+              </div>
+              <hr>
+              <!-- Refund Button -->
+              <div class="text-center mt-3">
+                <button class="btn btn-danger w-100" style="border-radius: 0px;" (click)="refundProjectDontaion()">Refund</button>
+              </div>
             </div>
           </div>
         </div>
@@ -92,10 +119,10 @@
               <app-upload-files (filesUploaded)="onFilesUploaded($event)"></app-upload-files>
               <!-- Button to add update -->
               <div class="d-flex justify-content-end">
-                <button class="btn btn-custom mx-1" style="border-radius: 5px;" (click)="addUpdate()">
+                <button class="btn btn-theme mx-1" style="border-radius: 5px;" (click)="addUpdate()">
                   Add Update
                 </button>
-                <button class="btn btn-custom" [disabled]="!deadlinePassed" style="border-radius: 5px;" (click)="addSnippet()">
+                <button class="btn btn-theme" [disabled]="!deadlinePassed" style="border-radius: 5px;" (click)="addSnippet()">
                   Add snippet
                 </button>
               </div>            
