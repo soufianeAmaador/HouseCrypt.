@@ -20,6 +20,7 @@ export class ProjectService {
   private readonly getDonationUrl = `${this.baseUrl}/get-donations`;
   private readonly uploadUpdateUrl = `${this.baseUrl}/upload-update`;
   private readonly getProjectSCIDURL = `${this.baseUrl}/get-projectscid`;
+  private readonly registerVoteUrl = `${this.baseUrl}/register-vote`;
 
   constructor(private http: HttpClient,
     private errorHandlerService: ErrorHandlerService
@@ -27,6 +28,12 @@ export class ProjectService {
 
   uploadProject(project: FormData): Observable<any> {
     return this.http.post<FormData>(this.uploadProjectUrl, project,{
+      withCredentials: true,
+    });
+  }
+
+  registerVote(votingType: number, weeks: number, id: number): Observable<any> {
+    return this.http.post<FormData>(`this.registerVoteUrl/${id}`, {votingtype: votingType, weeks: weeks},{
       withCredentials: true,
     });
   }

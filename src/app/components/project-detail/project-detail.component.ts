@@ -232,13 +232,27 @@ export class ProjectDetailComponent implements OnInit {
     this.projectService.updateProject(updatedProject);
   }
 
-  refundProjectDontaion() {
-    
+  async registerVote(votingType: number, weeks: number) {
+    if(this.project !== undefined && this.project.projectId !== undefined){
+      this.ethereumService.vote(this.project?.projectId,votingType,weeks)
+      .then(async (success)=>{
+        if(success){
+          console.log("successfully voted on the project");
+          this.projectService.registerVote(votingType,weeks,this.project!.projectSCID!).subscribe({
+            next: ()=>{
+              console.log("vote registered")
+            },
+            error: (error)=>{
+              this.errorHandlerService.handleError(error);
+            }
+          })
+        }
+      });
+    } else{
+      this.errorHandlerService.handleError("Project or projectId could not be found.");
+    }
   }
 
-  delayProject(weeks: number){
-
-  }
 
   isChanged(): boolean {
     const title = this.projectForm.get("projectTitle")?.getRawValue() as string;

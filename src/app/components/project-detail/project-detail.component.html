@@ -72,17 +72,18 @@
           
               <!-- Small Buttons for Weeks -->
               <div id="delay-options" class="d-flex flex-wrap justify-content-center gap-2">
-                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">1 Week</button>
-                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">2 Weeks</button>
-                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">3 Weeks</button>
-                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">4 Weeks</button>
-                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">5 Weeks</button>
-                <button class="btn btn-theme btn-sm" (click)="delayProject(1)">6 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="registerVote(3,1)">1 Week</button>
+                <button class="btn btn-theme btn-sm" (click)="registerVote(3,2)">2 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="registerVote(3,3)">3 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="registerVote(3,4)">4 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="registerVote(3,5)">5 Weeks</button>
+                <button class="btn btn-theme btn-sm" (click)="registerVote(3,6)">6 Weeks</button>
               </div>
               <hr>
               <!-- Refund Button -->
               <div class="text-center mt-3">
-                <button class="btn btn-danger w-100" style="border-radius: 0px;" (click)="refundProjectDontaion()">Refund</button>
+                <button class="btn btn-danger w-100" style="border-radius: 0px;" (click)="registerVote(2,0)">Refund</button>
+                <button class="btn btn-success w-100" style="border-radius: 0px;" (click)="registerVote(1,0)">Approve</button>
               </div>
             </div>
           </div>
