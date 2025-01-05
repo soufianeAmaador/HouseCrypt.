@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   sepoliaRpcUrl: 'https://sepolia.infura.io/v3/YOUR_INFURA_PROJECT_ID',
-  contractAddress: '0x0833Ebc4ad4a1724037E974E80fbb6CE13FFfeA5',
+  contractAddress: '0xce304d1c28f1a9ac634ff37d747fcfd441c6633e',
   contractAbi: [
     {
       "inputs": [],
@@ -47,31 +47,6 @@ export const environment = {
           "type": "uint256"
         },
         {
-          "indexed": true,
-          "internalType": "address",
-          "name": "approver",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "totalApproved",
-          "type": "uint256"
-        }
-      ],
-      "name": "ProjectApproved",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "projectId",
-          "type": "uint256"
-        },
-        {
           "indexed": false,
           "internalType": "uint256",
           "name": "totalPledged",
@@ -82,6 +57,12 @@ export const environment = {
           "internalType": "bool",
           "name": "approved",
           "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "delayWeeks",
+          "type": "uint256"
         }
       ],
       "name": "ProjectCompleted",
@@ -125,49 +106,86 @@ export const environment = {
       "type": "event"
     },
     {
+      "anonymous": false,
       "inputs": [
         {
+          "indexed": true,
           "internalType": "uint256",
-          "name": "",
+          "name": "projectId",
           "type": "uint256"
         }
       ],
-      "name": "approvals",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
+      "name": "RefundIssued",
+      "type": "event"
     },
     {
+      "anonymous": false,
       "inputs": [
         {
+          "indexed": true,
           "internalType": "uint256",
-          "name": "_projectId",
+          "name": "projectId",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "snippetHash",
+          "type": "string"
         }
       ],
-      "name": "approveProject",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      "name": "SnippetUploaded",
+      "type": "event"
     },
     {
+      "anonymous": false,
       "inputs": [
         {
+          "indexed": true,
           "internalType": "uint256",
-          "name": "_projectId",
+          "name": "projectId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "voter",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "voteType",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "delayWeeks",
           "type": "uint256"
         }
       ],
-      "name": "completeProject",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      "name": "VoteCasted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "projectId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "votingDeadline",
+          "type": "uint256"
+        }
+      ],
+      "name": "VotingStarted",
+      "type": "event"
     },
     {
       "inputs": [
@@ -193,6 +211,19 @@ export const environment = {
         }
       ],
       "name": "createProject",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_projectId",
+          "type": "uint256"
+        }
+      ],
+      "name": "finalizeProject",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -319,17 +350,78 @@ export const environment = {
           "type": "uint256"
         },
         {
+          "internalType": "uint256",
+          "name": "snippetDeadline",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "votingDeadline",
+          "type": "uint256"
+        },
+        {
           "internalType": "bool",
           "name": "completed",
           "type": "bool"
         },
         {
           "internalType": "bool",
-          "name": "approved",
+          "name": "snippetUploaded",
           "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "refundVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "satisfiedVotes",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_projectId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "snippetHash",
+          "type": "string"
+        }
+      ],
+      "name": "uploadSnippet",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_projectId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "voteType",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "delayWeeks",
+          "type": "uint256"
+        }
+      ],
+      "name": "vote",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     }
   ]

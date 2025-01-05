@@ -69,7 +69,7 @@ export class UserService {
     }).pipe(
       map((user: any) => ({
         ...user,
-        donations: user.donations.map((donation: any) => ({
+        donations: user.donations === null ? null : user.donations.map((donation: any) => ({
           ...donation,
           amount: BigInt(donation.amount), // Convert amount to BigInt
         })),

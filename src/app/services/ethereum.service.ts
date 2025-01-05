@@ -12,26 +12,40 @@ import { ProjectService } from "./project.service";
   providedIn: "root",
 })
 export class EthereumService {
-  private _accountsChanged = new Subject<string[]>();
+  private _accountsChanged = new Subject<string>();
   public provider: ethers.providers.Web3Provider | undefined;
   private contract: ethers.Contract | undefined;
+  private _noAccountsDetected = new Subject<void>();
 
 
   get accountsChanged() {
     return this._accountsChanged.asObservable();
   }
 
+  get noAccountsDetected() {
+    return this._noAccountsDetected.asObservable();
+  }
+
   constructor(
     private currencyService: CurrencyService, 
     private projectService: ProjectService,
-    private errorHandlerService: ErrorHandlerService) {
+    private errorHandlerService: ErrorHandlerService
+  ) {
 
       if (typeof window.ethereum !== 'undefined') {
       this.provider = new ethers.providers.Web3Provider(window.ethereum);
 
-      window.ethereum.on('accountsChanged', (accounts: string[]) => {
-        this._accountsChanged.next(accounts);
-      });
+  window.ethereum.on('accountsChanged', (accounts: string[]) => {
+    if (accounts.length > 0) {
+      this._accountsChanged.next(accounts[0]);
+      console.log("this is the current user: ");
+      console.log(accounts[0]);
+      localStorage.setItem("currentuser", accounts[0]);
+    } else {
+      console.log("No accounts connected");
+      this._noAccountsDetected.next(); // Emit the event
+    }
+  });
 
       this.contract = new ethers.Contract(
         environment.contractAddress,
@@ -39,7 +53,7 @@ export class EthereumService {
         this.provider.getSigner()
       );
     } else {
-      console.error('MetaMask is not installed');
+      this.errorHandlerService.handleError("MetaMask is not installed!");
     }
   }
 
@@ -48,11 +62,19 @@ export class EthereumService {
       const accounts: string[] = await this.provider.send('eth_requestAccounts', []);
       return accounts;
     } else {
+      this.errorHandlerService.handleError("MetaMask is not installed!");
       throw new Error('MetaMask is not installed');
     }
   }
 
   async getSigner() {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x539' }], // Chain ID for Ganache (1337 in hex)
+  });
+  
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+    console.log("do we have a signer? " + this.provider?.getSigner())
     return this.provider?.getSigner();
   }
 

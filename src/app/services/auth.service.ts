@@ -33,11 +33,14 @@ export class AuthService implements OnInit {
     this.isConnected().then((_isConnected) => {
       if (!_isConnected) this.connectWallet();
     });
+    this.ethereumService.noAccountsDetected.subscribe(() => {
+      this.logOut(); // Call logout when no accounts are detected
+    });
   }
 
   ngOnInit(): void {
     this.ethereumSubscription = this.ethereumService.accountsChanged.subscribe(
-      (accounts: string[]) => {
+      (accounts: string) => {
         console.log("on accounts changed");
         console.log("accounts have changed! " + accounts);
         accounts.length === 0 ? this.logOut() : this.connectWallet();
@@ -61,26 +64,32 @@ export class AuthService implements OnInit {
   public async connectWallet() {
     console.log("connectwallet");
     try {
+      // Fetch the accounts using ethereumService
       const accounts = await this.ethereumService.connectWallet();
+      
+      // Use the first account (currently selected in MetaMask)
       this.walletAddress.next(accounts[0]);
       localStorage.setItem("currentuser", accounts[0]);
-
+  
+      // Call sign-in and verification logic
       await this.signInWithEthereum()
         .then(() => this.sendForVerification())
         .catch((error) => {
           window.alert(error);
           this.errorHandlerService.handleError(error);
         });
-
+  
     } catch (error: any) {
       if (error.code === 4001) {
-        this.errorHandlerService.handleError("Metamask is not installed!");
+        // User denied the connection request
+        this.errorHandlerService.handleError("MetaMask is not installed!");
       } else {
         this.errorHandlerService.handleError(error);
       }
       await this.logOut();
     }
   }
+  
 
   private getNonce(): Observable<string> {
     return this.http.get(this.nonceUrl, {
@@ -113,6 +122,8 @@ export class AuthService implements OnInit {
   public async signInWithEthereum() {
     try {
       const signer = await this.ethereumService.getSigner();
+      console.log("signer from within: ");
+      console.log(signer);
       if (signer) {
         this.message = await this.createSiweMessage(
           await signer.getAddress(),
